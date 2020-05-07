@@ -9,35 +9,48 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import com.example.layout.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.color_my_view_activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+    private val myName: MyName = MyName("Aleks Haecky")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.color_my_view_activity_main)
-        setListeners()
 
+
+//        setContentView(R.layout.color_my_view_activity_main)
+//        setListeners()
+
+/* Start app Aboutme */
 //        setContentView(R.layout.activity_main)
-//
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.myName = myName
+        binding.doneButton.setOnClickListener {
+            addNickname(it)
+        }
 //        findViewById<Button>(R.id.done_button).setOnClickListener {
 //            addNickname(it)
 //        }
-//
-//        findViewById<TextView>(R.id.nickname_text).setOnClickListener {
-//            updateNickname(it)
-//        }
 
+        findViewById<TextView>(R.id.nickname_text).setOnClickListener {
+            updateNickname(it)
+        }
+/* End app Aboutme */
 
     }
 
     private fun addNickname(view: View) {
-        val editText = findViewById<EditText>(R.id.nickname_edit)
-        val nicknameTextView = findViewById<TextView>(R.id.nickname_text)
-
-        nicknameTextView.text = editText.text
-        editText.visibility = View.GONE
-        view.visibility = View.GONE
-        nicknameTextView.visibility = View.VISIBLE
+        binding.apply {
+            myName?.nickname = nicknameEdit.text.toString()
+            invalidateAll()
+            nicknameEdit.visibility = View.GONE
+            doneButton.visibility = View.GONE
+            nicknameText.visibility = View.VISIBLE
+        }
 
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -68,6 +81,12 @@ class MainActivity : AppCompatActivity() {
             R.id.box_three_text -> view.setBackgroundColor(Color.BLUE)
             R.id.box_four_text -> view.setBackgroundColor(Color.MAGENTA)
             R.id.box_five_text -> view.setBackgroundColor(Color.BLUE)
+
+            // Boxes using custom colors for background
+            R.id.red_button -> box_three_text.setBackgroundResource(R.color.my_red)
+            R.id.yellow_button -> box_four_text.setBackgroundResource(R.color.my_yellow)
+            R.id.green_button -> box_five_text.setBackgroundResource(R.color.my_green)
+
             else -> view.setBackgroundColor(Color.LTGRAY)
         }
     }
@@ -82,10 +101,14 @@ class MainActivity : AppCompatActivity() {
 
         val rootConstraintLayout = findViewById<View>(R.id.constraint_layout)
 
+        val redButton = findViewById<TextView>(R.id.red_button)
+        val greenButton = findViewById<TextView>(R.id.green_button)
+        val yellowButton = findViewById<TextView>(R.id.yellow_button)
+
         val clickableViews: List<View> =
             listOf(
                 boxOneText, boxTwoText, boxThreeText,
-                boxFourText, boxFiveText, rootConstraintLayout
+                boxFourText, boxFiveText, rootConstraintLayout, redButton, greenButton, yellowButton
             )
 
         for (item in clickableViews) {
