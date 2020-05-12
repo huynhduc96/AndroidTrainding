@@ -16,13 +16,19 @@
 
 package com.example.android.guesstheword.screens.game
 
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
@@ -33,114 +39,67 @@ import com.example.android.guesstheword.databinding.GameFragmentBinding
  */
 class GameFragment : Fragment() {
 
-    // The current word
-    private var word = ""
+  private lateinit var viewModel: GameViewModel
 
-    // The current score
-    private var score = 0
+  private lateinit var binding: GameFragmentBinding
 
-    // The list of words - the front of the list is the next word to guess
-    private lateinit var wordList: MutableList<String>
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
 
-    private lateinit var binding: GameFragmentBinding
-    private lateinit var viewModel: GameViewModel
+    // Inflate view and obtain an instance of the binding class
+    binding = DataBindingUtil.inflate(
+        inflater,
+        R.layout.game_fragment,
+        container,
+        false
+    )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    // Get the viewmodel
+    viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
-        // Inflate view and obtain an instance of the binding class
-        binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.game_fragment,
-                container,
-                false
-        )
-        Log.i("GameFragment", "Called ViewModelProviders.of")
-        viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+    // Set the viewmodel for databinding - this allows the bound layout access to all of the
+    // data in the VieWModel
+    binding.gameViewModel = viewModel
 
-        resetList()
-        nextWord()
+    // Specify the current activity as the lifecycle owner of the binding. This is used so that
+    // the binding can observe LiveData updates
+    binding.setLifecycleOwner(this)
 
-        binding.correctButton.setOnClickListener { onCorrect() }
-        binding.skipButton.setOnClickListener { onSkip() }
-        updateScoreText()
-        updateWordText()
-        return binding.root
-
-    }
-
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
-    }
-
-    /**
-     * Called when the game is finished
-     */
-    private fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(score)
+    // Sets up event listening to navigate the player when the game is finished
+    viewModel.eventGameFinish.observe(this, Observer { isFinished ->
+      if (isFinished) {
+        val currentScore = viewModel.score.value ?: 0
+        val action = GameFragmentDirections.actionGameToScore(currentScore)
         findNavController(this).navigate(action)
+        viewModel.onGameFinishComplete()
+      }
+    })
+
+    // Buzzes when triggered with different buzz events
+    viewModel.eventBuzz.observe(this, Observer { buzzType ->
+      if (buzzType != GameViewModel.BuzzType.NO_BUZZ) {
+        buzz(buzzType.pattern)
+        viewModel.onBuzzComplete()
+      }
+    })
+
+    return binding.root
+
+  }
+
+  /**
+   * Given a pattern, this method makes sure the device buzzes
+   */
+  private fun buzz(pattern: LongArray) {
+    val buzzer = activity?.getSystemService<Vibrator>()
+    buzzer?.let {
+      // Vibrate for 500 milliseconds
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        buzzer.vibrate(VibrationEffect.createWaveform(pattern, -1))
+      } else {
+        //deprecated in API 26
+        buzzer.vibrate(pattern, -1)
+      }
     }
-
-    /**
-     * Moves to the next word in the list
-     */
-    private fun nextWord() {
-        //Select and remove a word from the list
-        if (wordList.isEmpty()) {
-            gameFinished()
-        } else {
-            word = wordList.removeAt(0)
-        }
-        updateWordText()
-        updateScoreText()
-    }
-
-    /** Methods for buttons presses **/
-
-    private fun onSkip() {
-        score--
-        nextWord()
-    }
-
-    private fun onCorrect() {
-        score++
-        nextWord()
-    }
-
-    /** Methods for updating the UI **/
-
-    private fun updateWordText() {
-        binding.wordText.text = word
-
-    }
-
-    private fun updateScoreText() {
-        binding.scoreText.text = score.toString()
-    }
+  }
 }
