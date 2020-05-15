@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.example.android.trackmysleepquality.sleepquality
+package com.example.android.trackmysleepquality.sleepdetail
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
+import com.example.android.trackmysleepquality.database.SleepNight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +33,7 @@ import kotlinx.coroutines.withContext
  *
  * @param sleepNightKey The key of the current night we are working on.
  */
-class SleepQualityViewModel(
+class SleepDetailViewModel(
         private val sleepNightKey: Long = 0L,
         dataSource: SleepDatabaseDao) : ViewModel() {
 
@@ -47,17 +49,13 @@ class SleepQualityViewModel(
      */
     private val viewModelJob = Job()
 
-    /**
-     * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
-     *
-     * Because we pass it [viewModelJob], any coroutine started in this scope can be cancelled
-     * by calling `viewModelJob.cancel()`
-     *
-     * By default, all coroutines started in uiScope will launch in [Dispatchers.Main] which is
-     * the main thread on Android. This is a sensible default because most coroutines started by
-     * a [ViewModel] update the UI after performing some processing.
-     */
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val night: LiveData<SleepNight>
+
+    fun getNight() = night
+
+    init {
+        night=database.getNightWithId(sleepNightKey)
+    }
 
     /**
      * Variable that tells the fragment whether it should navigate to [SleepTrackerFragment].
@@ -90,23 +88,7 @@ class SleepQualityViewModel(
         _navigateToSleepTracker.value = null
     }
 
-    /**
-     * Sets the sleep quality and updates the database.
-     *
-     * Then navigates back to the SleepTrackerFragment.
-     */
-    fun onSetSleepQuality(quality: Int) {
-        uiScope.launch {
-            // IO is a thread pool for running operations that access the disk, such as
-            // our Room database.
-            withContext(Dispatchers.IO) {
-                val tonight = database.get(sleepNightKey)
-                tonight.sleepQuality = quality
-                database.update(tonight)
-            }
-
-            // Setting this state variable to true will alert the observer and trigger navigation.
-            _navigateToSleepTracker.value = true
-        }
+    fun onClose() {
+        _navigateToSleepTracker.value = true
     }
 }
