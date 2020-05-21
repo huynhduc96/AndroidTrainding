@@ -18,20 +18,53 @@ package com.example.android.devbyteviewer.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.*
 import com.example.android.devbyteviewer.R
+import com.example.android.devbyteviewer.work.RefreshDataWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * This is a single activity application that uses the Navigation library. Content is displayed
  * by Fragments.
  */
 class DevByteActivity : AppCompatActivity() {
+  private val applicationScope = CoroutineScope(Dispatchers.Default)
+  val constraints = Constraints.Builder()
+      .setRequiredNetworkType(NetworkType.UNMETERED)
+      .build()
 
-    /**
-     * Called when the activity is starting.  This is where most initialization
-     * should go
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dev_byte_viewer)
+  /**
+   * Called when the activity is starting.  This is where most initialization
+   * should go
+   */
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    delayedInit()
+    setContentView(R.layout.activity_dev_byte_viewer)
+  }
+
+  private fun delayedInit() {
+    applicationScope.launch {
+      Timber.plant(Timber.DebugTree())
+      setupRecurringWork()
     }
+  }
+
+  /**
+   * Setup WorkManager background job to 'fetch' new network data daily.
+   */
+  private fun setupRecurringWork() {
+    val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+        .setConstraints(constraints)
+        .build()
+    WorkManager.getInstance().enqueueUniquePeriodicWork(
+        RefreshDataWorker.WORK_NAME,
+        ExistingPeriodicWorkPolicy.KEEP,
+        repeatingRequest
+    )
+  }
 }
