@@ -19,6 +19,7 @@ package com.example.android.marsrealestate.overview
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -26,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
 import com.example.android.marsrealestate.network.MarsApiFilter
+import com.example.android.marsrealestate.network.MarsProperty
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
@@ -37,6 +39,19 @@ class OverviewFragment : Fragment() {
      */
     private val viewModel: OverviewViewModel by lazy {
         ViewModelProviders.of(this).get(OverviewViewModel::class.java)
+    }
+
+    private val viewModelAdapter : PhotoGridAdapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener{
+        viewModel.displayPropertyDetails(it)
+    })
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.imagelist.observe(viewLifecycleOwner, Observer<List<MarsProperty>> { images ->
+            images?.apply {
+                viewModelAdapter?.submitList(this)
+            }
+        })
     }
 
     /**
@@ -52,9 +67,7 @@ class OverviewFragment : Fragment() {
 
         // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
-        binding.photosGrid.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener{
-            viewModel.displayPropertyDetails(it)
-        })
+        binding.photosGrid.adapter = viewModelAdapter
         viewModel.navigateToSelectedProperty.observe(this, Observer {
             if (null != it){
                 this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
@@ -62,9 +75,25 @@ class OverviewFragment : Fragment() {
             }
         })
 
+        // Observer for the network error.
+        viewModel.eventNetworkError.observe(this, Observer<Boolean> { isNetworkError ->
+            if (isNetworkError) onNetworkError()
+        })
+
         setHasOptionsMenu(true)
         return binding.root
     }
+
+    /**
+     * Method for displaying a Toast error message for network errors.
+     */
+    private fun onNetworkError() {
+        if(!viewModel.isNetworkErrorShown.value!!) {
+            Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+            viewModel.onNetworkErrorShown()
+        }
+    }
+
 
     /**
      * Inflates the overflow menu that contains filtering options.

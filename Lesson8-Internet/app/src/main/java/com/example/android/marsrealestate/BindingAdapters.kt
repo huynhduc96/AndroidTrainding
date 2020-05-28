@@ -20,12 +20,15 @@ package com.example.android.marsrealestate
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.Transformations
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.android.marsrealestate.network.MarsApiFilter
 import com.example.android.marsrealestate.network.MarsProperty
 import com.example.android.marsrealestate.overview.OverviewViewModel
 import com.example.android.marsrealestate.overview.PhotoGridAdapter
@@ -65,6 +68,14 @@ fun bindStatus(statusImageView: ImageView,
     OverviewViewModel.MarsApiStatus.DONE -> {
       statusImageView.visibility = View.GONE
     }
+  }
+}
+
+@BindingAdapter("android:onRefresh")
+fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(viewModel: OverviewViewModel) {
+  setOnRefreshListener {
+    viewModel.refreshDataFromRepository(MarsApiFilter.SHOW_ALL)
+    isRefreshing = false
   }
 }
 
