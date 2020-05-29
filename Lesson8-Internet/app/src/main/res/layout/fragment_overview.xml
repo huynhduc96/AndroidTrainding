@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onRefresh="@{viewModel}"
-    tools:context="com.example.android.marsrealestate.MainActivity">
+    tools:context=".screen.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
@@ -63,6 +63,6 @@
 
     <variable
       name="viewModel"
-      type="com.example.android.marsrealestate.overview.OverviewViewModel" />
+      type="com.example.android.marsrealestate.screen.overview.OverviewViewModel" />
   </data>
 </layout>

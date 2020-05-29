@@ -24,7 +24,7 @@
     <import type="android.view.View"/>
     <variable
       name="property"
-      type="com.example.android.marsrealestate.network.MarsProperty" />
+      type="com.example.android.marsrealestate.data.model.MarsProperty" />
   </data>
   <FrameLayout
     android:layout_width="match_parent"

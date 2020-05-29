@@ -1,4 +1,4 @@
-package com.example.android.marsrealestate.database
+package com.example.android.marsrealestate.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

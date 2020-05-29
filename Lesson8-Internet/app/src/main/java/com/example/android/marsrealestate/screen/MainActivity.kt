@@ -15,10 +15,11 @@
  *
  */
 
-package com.example.android.marsrealestate
+package com.example.android.marsrealestate.screen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.marsrealestate.R
 
 class MainActivity : AppCompatActivity() {
 

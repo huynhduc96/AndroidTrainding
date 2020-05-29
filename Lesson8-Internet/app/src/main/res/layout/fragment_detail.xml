@@ -72,6 +72,6 @@
   <data>
     <variable
       name="viewModel"
-      type="com.example.android.marsrealestate.detail.DetailViewModel" />
+      type="com.example.android.marsrealestate.screen.detail.DetailViewModel" />
   </data>
 </layout>

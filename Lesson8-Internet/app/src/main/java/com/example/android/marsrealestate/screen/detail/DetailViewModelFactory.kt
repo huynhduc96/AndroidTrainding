@@ -14,12 +14,12 @@
  *  limitations under the License.
  */
 
-package com.example.android.marsrealestate.detail
+package com.example.android.marsrealestate.screen.detail
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.marsrealestate.network.MarsProperty
+import com.example.android.marsrealestate.data.model.MarsProperty
 
 /**
  * Simple ViewModel factory that provides the MarsProperty and context to the ViewModel.

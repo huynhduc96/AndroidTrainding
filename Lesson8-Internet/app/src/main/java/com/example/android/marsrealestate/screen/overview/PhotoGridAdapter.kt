@@ -15,7 +15,7 @@
  *
  */
 
-package com.example.android.marsrealestate.overview
+package com.example.android.marsrealestate.screen.overview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.marsrealestate.databinding.GridViewItemBinding
-import com.example.android.marsrealestate.network.MarsProperty
+import com.example.android.marsrealestate.data.model.MarsProperty
 
 class PhotoGridAdapter(private val onClickListener: OnClickListener) : ListAdapter<MarsProperty, PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
 
