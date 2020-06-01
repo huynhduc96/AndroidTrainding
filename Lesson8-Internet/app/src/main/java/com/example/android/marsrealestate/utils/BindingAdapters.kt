@@ -15,23 +15,21 @@
  *
  */
 
-package com.example.android.marsrealestate
+package com.example.android.marsrealestate.utils
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.Transformations
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.android.marsrealestate.network.MarsApiFilter
-import com.example.android.marsrealestate.network.MarsProperty
-import com.example.android.marsrealestate.overview.OverviewViewModel
-import com.example.android.marsrealestate.overview.PhotoGridAdapter
+import com.example.android.marsrealestate.R
+import com.example.android.marsrealestate.data.service.MarsApiFilter
+import com.example.android.marsrealestate.data.model.MarsProperty
+import com.example.android.marsrealestate.screen.overview.OverviewViewModel
+import com.example.android.marsrealestate.screen.overview.PhotoGridAdapter
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {

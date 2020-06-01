@@ -15,12 +15,10 @@
  *
  */
 
-package com.example.android.marsrealestate.network
+package com.example.android.marsrealestate.data.model
 
 import android.os.Parcelable
-import com.example.android.marsrealestate.database.DatabaseImage
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 

@@ -1,6 +1,7 @@
-package com.example.android.marsrealestate.network
+package com.example.android.marsrealestate.utils
 
-import com.example.android.marsrealestate.database.DatabaseImage
+import com.example.android.marsrealestate.data.model.MarsProperty
+import com.example.android.marsrealestate.data.model.DatabaseImage
 
 
 fun List<DatabaseImage>.asImageModel(): List<MarsProperty> {

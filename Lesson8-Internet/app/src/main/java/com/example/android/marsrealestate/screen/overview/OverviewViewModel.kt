@@ -15,27 +15,17 @@
  *
  */
 
-package com.example.android.marsrealestate.overview
+package com.example.android.marsrealestate.screen.overview
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.marsrealestate.database.ImagesDatabase
-import com.example.android.marsrealestate.database.getDatabase
-import com.example.android.marsrealestate.network.MarsApi
-import com.example.android.marsrealestate.network.MarsApiFilter
-import com.example.android.marsrealestate.network.MarsProperty
-import com.example.android.marsrealestate.network.asDatabaseModel
-import com.example.android.marsrealestate.repository.ImagesRepository
+import com.example.android.marsrealestate.data.service.MarsApiFilter
+import com.example.android.marsrealestate.data.model.MarsProperty
+import com.example.android.marsrealestate.data.repository.ImagesRepository
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 
 
@@ -54,7 +44,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
   /**
    * The data source this ViewModel will fetch results from.
    */
-  private val imagesRepository = ImagesRepository(getDatabase(application))
+  private val imagesRepository = ImagesRepository(getApplication())
 
   /**
    * A list of images  displayed on the screen.
@@ -109,7 +99,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
   /**
    * Sets the value of the status LiveData to the Mars API status.
    */
-  private fun getMarsRealEstateProperties(filter: MarsApiFilter) {
+  fun getMarsRealEstateProperties(filter: MarsApiFilter) {
     coroutineScope.launch {
       try {
         _status.value = MarsApiStatus.LOADING
@@ -173,6 +163,4 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
   fun displayPropertyDetailsComplete() {
     _navigateToSelectedProperty.value = null
   }
-
 }
-

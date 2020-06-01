@@ -15,7 +15,7 @@
  *
  */
 
-package com.example.android.marsrealestate.overview
+package com.example.android.marsrealestate.screen.overview
 
 import android.os.Bundle
 import android.view.*
@@ -25,9 +25,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
+import com.example.android.marsrealestate.data.model.MarsProperty
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
-import com.example.android.marsrealestate.network.MarsApiFilter
-import com.example.android.marsrealestate.network.MarsProperty
+import com.example.android.marsrealestate.data.service.MarsApiFilter
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
@@ -68,6 +68,7 @@ class OverviewFragment : Fragment() {
         // Giving the binding access to the OverviewViewModel
         binding.viewModel = viewModel
         binding.photosGrid.adapter = viewModelAdapter
+
         viewModel.navigateToSelectedProperty.observe(this, Observer {
             if (null != it){
                 this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
@@ -113,4 +114,5 @@ class OverviewFragment : Fragment() {
         )
         return true
     }
+
 }
