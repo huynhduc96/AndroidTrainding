@@ -33,7 +33,7 @@ class DetailFragment : Fragment() {
 
     val application = requireNotNull(activity).application
     val binding = FragmentDetailBinding.inflate(inflater)
-    val marsProperty = DetailFragmentArgs.fromBundle(arguments!!).selectedProperty
+    val marsProperty = DetailFragmentArgs.fromBundle(requireArguments()).selectedProperty
     val viewModelFactory = DetailViewModelFactory(marsProperty, application)
     binding.viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
     binding.setLifecycleOwner(this)

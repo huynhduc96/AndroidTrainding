@@ -50,4 +50,3 @@ class DetailViewModel(marsProperty: MarsProperty, app: Application) : AndroidVie
             }))
   }
 }
-
