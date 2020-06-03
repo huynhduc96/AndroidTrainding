@@ -17,7 +17,7 @@ val repositoryModule = module {
 
 }
 
-fun createImagesRoomDatabase(context: Context) =
+private fun createImagesRoomDatabase(context: Context) =
     Room.databaseBuilder(context, ImagesDatabase::class.java, "image_database").build()
 
 fun createImageDao(imageDatabase: ImagesDatabase) = imageDatabase.ImageDao
