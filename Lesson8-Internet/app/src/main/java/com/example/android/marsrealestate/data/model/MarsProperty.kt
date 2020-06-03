@@ -33,4 +33,3 @@ data class MarsProperty(
     val isRental
         get() = type == "rent"
 }
-

@@ -76,4 +76,3 @@ fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(viewModel: Overvie
     isRefreshing = false
   }
 }
-

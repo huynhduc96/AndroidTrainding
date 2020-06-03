@@ -22,24 +22,19 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.android.marsrealestate.R
 import com.example.android.marsrealestate.data.model.MarsProperty
 import com.example.android.marsrealestate.databinding.FragmentOverviewBinding
 import com.example.android.marsrealestate.data.service.MarsApiFilter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * This fragment shows the the status of the Mars real-estate web services transaction.
  */
 class OverviewFragment : Fragment() {
 
-    /**
-     * Lazily initialize our [OverviewViewModel].
-     */
-    private val viewModel: OverviewViewModel by lazy {
-        ViewModelProviders.of(this).get(OverviewViewModel::class.java)
-    }
+    private val viewModel : OverviewViewModel by viewModel()
 
     private val viewModelAdapter : PhotoGridAdapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener{
         viewModel.displayPropertyDetails(it)
@@ -69,7 +64,7 @@ class OverviewFragment : Fragment() {
         binding.viewModel = viewModel
         binding.photosGrid.adapter = viewModelAdapter
 
-        viewModel.navigateToSelectedProperty.observe(this, Observer {
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if (null != it){
                 this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
                 viewModel.displayPropertyDetailsComplete()
@@ -77,7 +72,7 @@ class OverviewFragment : Fragment() {
         })
 
         // Observer for the network error.
-        viewModel.eventNetworkError.observe(this, Observer<Boolean> { isNetworkError ->
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
             if (isNetworkError) onNetworkError()
         })
 

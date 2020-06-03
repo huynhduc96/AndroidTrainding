@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android.marsrealestate.data.service.MarsApiFilter
 import com.example.android.marsrealestate.data.model.MarsProperty
 import com.example.android.marsrealestate.data.repository.ImagesRepository
+import com.example.android.marsrealestate.data.repository.impl.ImagesRepositoryImpl
 import kotlinx.coroutines.*
 import java.io.IOException
 
@@ -32,8 +33,8 @@ import java.io.IOException
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
-class OverviewViewModel(application: Application) : AndroidViewModel(application){
-  enum class MarsApiStatus { LOADING,  ERROR, DONE }
+class OverviewViewModel(private val imagesRepository: ImagesRepositoryImpl) : ViewModel() {
+  enum class MarsApiStatus { LOADING, ERROR, DONE }
 
   // The internal MutableLiveData String that stores the status of the most recent request
   private var viewModelJob = Job()
@@ -42,14 +43,9 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
 
 
   /**
-   * The data source this ViewModel will fetch results from.
-   */
-  private val imagesRepository = ImagesRepository(getApplication())
-
-  /**
    * A list of images  displayed on the screen.
    */
-  val imagelist = imagesRepository.images
+  val imagelist = imagesRepository.images()
 
   // The external immutable LiveData
   private val _status = MutableLiveData<MarsApiStatus>()
@@ -69,6 +65,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
    * way to set this value to observers.
    */
   private var _eventNetworkError = MutableLiveData<Boolean>(false)
+
   /**
    * Event triggered for network error. Views should use this to get access
    * to the data.
@@ -103,14 +100,16 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     coroutineScope.launch {
       try {
         _status.value = MarsApiStatus.LOADING
-        imagesRepository.getnewData(filter)
+        withContext(Dispatchers.IO) {
+          imagesRepository.getnewData(filter)
+        }
         _status.value = MarsApiStatus.DONE
         _eventNetworkError.value = false
         _isNetworkErrorShown.value = false
       } catch (e: Exception) {
         _status.value = MarsApiStatus.ERROR
         _properties.value = ArrayList()
-        if(imagelist.value.isNullOrEmpty())
+        if (imagelist.value.isNullOrEmpty())
           _eventNetworkError.value = true
       }
     }
@@ -124,7 +123,9 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     coroutineScope.launch {
       try {
         _status.value = MarsApiStatus.LOADING
-        imagesRepository.refreshImage(filter)
+        withContext(Dispatchers.IO) {
+          imagesRepository.refreshImage(filter)
+        }
         _status.value = MarsApiStatus.DONE
         _eventNetworkError.value = false
         _isNetworkErrorShown.value = false
@@ -133,7 +134,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
       } catch (networkError: IOException) {
         _status.value = MarsApiStatus.ERROR
         // Show a Toast error message and hide the progress bar.
-        if(imagelist.value.isNullOrEmpty())
+        if (imagelist.value.isNullOrEmpty())
           _eventNetworkError.value = true
       }
     }
