@@ -20,6 +20,6 @@ val repositoryModule = module {
 private fun createImagesRoomDatabase(context: Context) =
     Room.databaseBuilder(context, ImagesDatabase::class.java, "image_database").build()
 
-fun createImageDao(imageDatabase: ImagesDatabase) = imageDatabase.ImageDao
+private fun createImageDao(imageDatabase: ImagesDatabase) = imageDatabase.ImageDao
 
-fun createImageRepositoryImpl(imageDao: ImageDao, marsApiService: MarsApiService) = ImagesRepositoryImpl(imageDao, marsApiService)
+private fun createImageRepositoryImpl(imageDao: ImageDao, marsApiService: MarsApiService) = ImagesRepositoryImpl(imageDao, marsApiService)
