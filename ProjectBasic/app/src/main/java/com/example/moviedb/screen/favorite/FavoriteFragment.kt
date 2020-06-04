@@ -29,5 +29,4 @@ class FavoriteFragment : Fragment() {
         fun newInstance() =
             FavoriteFragment()
     }
-
 }
