@@ -91,5 +91,4 @@ dependencies {
 
     // Koin AndroidX Fragment Factory (unstable version)
     implementation "org.koin:koin-androidx-fragment:$koin_version"
-
 }

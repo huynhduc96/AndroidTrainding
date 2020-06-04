@@ -14,8 +14,9 @@ import kotlinx.android.synthetic.main.fragment_container.view.*
 import kotlinx.android.synthetic.main.toolbar.view.*
 
 class ContainerFragment : Fragment() {
+
     private var startingPosition = 0
-    private var changeMenu = true
+    private var ischangeMenu = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,14 +36,12 @@ class ContainerFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (changeMenu) {
+        if (ischangeMenu) {
             inflater.inflate(R.menu.search_view_home, menu)
         } else {
             activity?.run {
                 inflater.inflate(R.menu.search_view_favorite, menu)
-                val manager = supportFragmentManager
-                val fragment =
-                    manager.findFragmentById(R.id.containerFrameLayout)
+                val fragment = supportFragmentManager.findFragmentById(R.id.containerFrameLayout)
                 if (fragment is FavoriteFragment) {
                     val searchView =
                         menu.findItem(R.id.ic_searchView_favorite).actionView as SearchView
@@ -64,7 +63,7 @@ class ContainerFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.ic_searchView_home) {
+        if (item.itemId == R.id.itemSeachView) {
             activity?.run {
                 supportFragmentManager.beginTransaction().setCustomAnimations(
                     R.anim.right_to_left,
@@ -96,7 +95,7 @@ class ContainerFragment : Fragment() {
                         R.anim.exit_right_to_left
                     ).replace(R.id.containerFrameLayout, fragment)
                         .commit()
-                    changeMenu = true
+                    ischangeMenu = true
                 }
                 startingPosition < position -> {
                     supportFragmentManager.beginTransaction().setCustomAnimations(
@@ -106,7 +105,7 @@ class ContainerFragment : Fragment() {
                         R.anim.exit_left_to_right
                     ).replace(R.id.containerFrameLayout, fragment)
                         .commit()
-                    changeMenu = false
+                    ischangeMenu = false
                 }
                 else -> {
                     supportFragmentManager.beginTransaction()

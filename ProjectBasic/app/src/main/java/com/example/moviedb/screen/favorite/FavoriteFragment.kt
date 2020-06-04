@@ -10,11 +10,6 @@ import com.example.moviedb.R
 
 class FavoriteFragment : Fragment() {
 
-    companion object {
-        fun newInstance() =
-            FavoriteFragment()
-    }
-
     private lateinit var viewModel: FavoriteViewModel
 
     override fun onCreateView(
@@ -28,6 +23,11 @@ class FavoriteFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(FavoriteViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    companion object {
+        fun newInstance() =
+            FavoriteFragment()
     }
 
 }

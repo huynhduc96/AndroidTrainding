@@ -10,10 +10,6 @@ import com.example.moviedb.R
 
 class SearchFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = SearchFragment()
-    }
-
     private lateinit var viewModel: SearchViewModel
 
     override fun onCreateView(
@@ -29,4 +25,7 @@ class SearchFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    companion object {
+        fun newInstance() = SearchFragment()
+    }
 }

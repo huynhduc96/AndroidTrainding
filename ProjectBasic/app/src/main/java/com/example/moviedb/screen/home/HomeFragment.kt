@@ -10,9 +10,6 @@ import com.example.moviedb.R
 
 class HomeFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
 
     private lateinit var viewModel: HomeViewModel
 
@@ -29,4 +26,7 @@ class HomeFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    companion object {
+        fun newInstance() = HomeFragment()
+    }
 }
