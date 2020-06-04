@@ -10,7 +10,6 @@ import com.example.moviedb.R
 
 class HomeFragment : Fragment() {
 
-
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
