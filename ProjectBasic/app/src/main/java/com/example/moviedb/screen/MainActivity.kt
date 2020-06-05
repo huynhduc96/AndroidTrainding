@@ -44,11 +44,11 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    viewPager.currentItem = TabFragmentType.HOME_FRAGMENT.value
+                    viewPager.currentItem = MainPage.HOME_PAGE
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.favorite -> {
-                    viewPager.currentItem = TabFragmentType.FAVORITE_FRAGMENT.value
+                    viewPager.currentItem = MainPage.FAVORITE_PAGE
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -59,8 +59,8 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         when (position) {
-            TabFragmentType.HOME_FRAGMENT.value -> bottomNavigation.menu.getItem(TabFragmentType.HOME_FRAGMENT.value).isChecked = true
-            TabFragmentType.FAVORITE_FRAGMENT.value -> bottomNavigation.menu.getItem(TabFragmentType.FAVORITE_FRAGMENT.value).isChecked = true
+            MainPage.HOME_PAGE -> bottomNavigation.menu.getItem(MainPage.HOME_PAGE).isChecked = true
+            MainPage.FAVORITE_PAGE -> bottomNavigation.menu.getItem(MainPage.FAVORITE_PAGE).isChecked = true
         }
     }
 

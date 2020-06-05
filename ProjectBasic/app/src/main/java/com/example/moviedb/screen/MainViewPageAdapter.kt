@@ -10,8 +10,8 @@ class MainViewPageAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(postion: Int): Fragment {
         return when (postion) {
-            TabFragmentType.HOME_FRAGMENT.value -> HomeFragment()
-            TabFragmentType.FAVORITE_FRAGMENT.value -> FavoriteFragment()
+            MainPage.HOME_PAGE-> HomeFragment()
+            MainPage.FAVORITE_PAGE -> FavoriteFragment()
             else -> HomeFragment()
         }
     }
