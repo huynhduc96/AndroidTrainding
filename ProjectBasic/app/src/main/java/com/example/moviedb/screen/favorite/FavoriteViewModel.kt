@@ -1,7 +1,6 @@
 package com.example.moviedb.screen.favorite
 
-import androidx.lifecycle.ViewModel
+import com.example.moviedb.screen.base.BaseViewModel
 
-class FavoriteViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class FavoriteViewModel : BaseViewModel() {
 }

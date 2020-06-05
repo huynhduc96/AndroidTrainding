@@ -1,7 +1,6 @@
 package com.example.moviedb.screen.home
 
-import androidx.lifecycle.ViewModel
+import com.example.moviedb.screen.base.BaseViewModel
 
-class HomeViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class HomeViewModel : BaseViewModel() {
 }

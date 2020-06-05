@@ -18,21 +18,52 @@
 package com.example.moviedb.screen
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.example.moviedb.R
-import com.example.moviedb.screen.navigation.ContainerFragment
+import com.example.moviedb.screen.base.BaseActivity
+import com.example.moviedb.utils.annotation.MainPage
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
-    /**
-     * Our MainActivity is only responsible for setting the content view that contains the
-     * Navigation Host.
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrameLayout, ContainerFragment())
-            .commit()
+    override fun initComponent(saveInstantState: Bundle?) {
+        setSupportActionBar(toolbar)
+        viewPager.adapter = MainViewPageAdapter(supportFragmentManager)
+        bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
+        viewPager.addOnPageChangeListener(this)
     }
+
+    override fun getLayout() = R.layout.activity_main
+
+    //Setting NavigationBottom
+
+    private val selectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    viewPager.currentItem = MainPage.HOME_PAGE
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.favorite -> {
+                    viewPager.currentItem = MainPage.FAVORITE_PAGE
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+            return@OnNavigationItemSelectedListener false
+        }
+
+    override fun onPageScrollStateChanged(state: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        when (position) {
+            MainPage.HOME_PAGE -> bottomNavigation.menu.getItem(
+                MainPage.HOME_PAGE).isChecked = true
+            MainPage.FAVORITE_PAGE -> bottomNavigation.menu.getItem(
+                MainPage.FAVORITE_PAGE).isChecked = true
+        }
+    }
+
+    override fun onPageSelected(position: Int) {}
 }

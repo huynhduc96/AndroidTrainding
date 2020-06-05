@@ -1,7 +1,6 @@
 package com.example.moviedb.screen.search
 
-import androidx.lifecycle.ViewModel
+import com.example.moviedb.screen.base.BaseViewModel
 
-class SearchViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class SearchViewModel : BaseViewModel() {
 }
