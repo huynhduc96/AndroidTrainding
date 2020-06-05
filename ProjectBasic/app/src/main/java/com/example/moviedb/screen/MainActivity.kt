@@ -59,8 +59,8 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         when (position) {
-            TabFragmentType.HOME_FRAGMENT.value -> bottomNavigation.menu.getItem(0).isChecked = true
-            TabFragmentType.FAVORITE_FRAGMENT.value -> bottomNavigation.menu.getItem(1).isChecked = true
+            TabFragmentType.HOME_FRAGMENT.value -> bottomNavigation.menu.getItem(TabFragmentType.HOME_FRAGMENT.value).isChecked = true
+            TabFragmentType.FAVORITE_FRAGMENT.value -> bottomNavigation.menu.getItem(TabFragmentType.FAVORITE_FRAGMENT.value).isChecked = true
         }
     }
 
