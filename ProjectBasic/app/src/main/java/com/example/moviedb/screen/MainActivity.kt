@@ -21,6 +21,7 @@ import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import com.example.moviedb.R
 import com.example.moviedb.screen.base.BaseActivity
+import com.example.moviedb.utils.annotation.MainPage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -28,12 +29,10 @@ import kotlinx.android.synthetic.main.toolbar.*
 class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun initComponent(saveInstantState: Bundle?) {
-        bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
         setSupportActionBar(toolbar)
-
-        viewPager.addOnPageChangeListener(this)
-
         viewPager.adapter = MainViewPageAdapter(supportFragmentManager)
+        bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
+        viewPager.addOnPageChangeListener(this)
     }
 
     override fun getLayout() = R.layout.activity_main
@@ -59,8 +58,10 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         when (position) {
-            MainPage.HOME_PAGE -> bottomNavigation.menu.getItem(MainPage.HOME_PAGE).isChecked = true
-            MainPage.FAVORITE_PAGE -> bottomNavigation.menu.getItem(MainPage.FAVORITE_PAGE).isChecked = true
+            MainPage.HOME_PAGE -> bottomNavigation.menu.getItem(
+                MainPage.HOME_PAGE).isChecked = true
+            MainPage.FAVORITE_PAGE -> bottomNavigation.menu.getItem(
+                MainPage.FAVORITE_PAGE).isChecked = true
         }
     }
 

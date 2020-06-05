@@ -16,8 +16,9 @@ abstract class BaseFragment<ViewBinding : ViewDataBinding, ViewModel : BaseViewM
 
     @get:LayoutRes
     protected abstract val layoutId: Int
-    private lateinit var viewDataBinding: ViewBinding
     protected abstract val viewModel: ViewModel
+    private lateinit var viewDataBinding: ViewBinding
+
 
     abstract fun initComponents(view: ViewBinding)
 

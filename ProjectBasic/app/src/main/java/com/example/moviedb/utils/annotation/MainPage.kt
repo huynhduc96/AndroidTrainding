@@ -1,9 +1,11 @@
-package com.example.moviedb.screen
+package com.example.moviedb.utils.annotation
 
 import androidx.annotation.IntDef
 
-@IntDef(MainPage.HOME_PAGE,
-    MainPage.FAVORITE_PAGE)
+@IntDef(
+    MainPage.HOME_PAGE,
+    MainPage.FAVORITE_PAGE
+)
 
 annotation class MainPage {
     companion object {
