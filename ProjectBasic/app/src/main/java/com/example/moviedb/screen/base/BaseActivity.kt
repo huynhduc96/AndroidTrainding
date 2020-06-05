@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity(){
+abstract class BaseActivity : AppCompatActivity() {
+
     abstract fun initComponent(saveInstantState: Bundle?)
 
     abstract fun getLayout(): Int

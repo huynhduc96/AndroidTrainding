@@ -6,7 +6,7 @@ import com.example.moviedb.screen.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FavoriteFragment : BaseFragment<FavoriteFragmentBinding,FavoriteViewModel>() {
+class FavoriteFragment : BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>() {
     override val layoutId: Int
         get() = R.layout.favorite_fragment
     override val viewModel: FavoriteViewModel by viewModel()

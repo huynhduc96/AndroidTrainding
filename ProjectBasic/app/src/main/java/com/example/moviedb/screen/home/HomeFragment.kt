@@ -6,9 +6,10 @@ import com.example.moviedb.screen.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class HomeFragment : BaseFragment<HomeFragmentBinding,HomeViewModel>() {
+class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
-    override val layoutId: Int = R.layout.home_fragment
+    override val layoutId: Int
+        get() = R.layout.home_fragment
     override val viewModel: HomeViewModel by viewModel()
 
     override fun initComponents(view: HomeFragmentBinding) {

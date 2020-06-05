@@ -25,34 +25,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
+
     override fun initComponent(saveInstantState: Bundle?) {
-        this.bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
+        bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
         setSupportActionBar(toolbar)
 
-        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
+        viewPager.addOnPageChangeListener(this)
 
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                when (position) {
-                    0 -> bottomNavigation.menu.getItem(0).isChecked = true
-                    1 -> bottomNavigation.menu.getItem(1).isChecked = true
-                }
-            }
-
-            override fun onPageSelected(position: Int) {}
-        })
-
-        val tabAdapter = TabAdapter(supportFragmentManager, this)
-
-        viewPager.adapter = tabAdapter
+        viewPager.adapter = MainViewPageAdapter(supportFragmentManager)
     }
 
-    override fun getLayout(): Int = R.layout.activity_main
+    override fun getLayout() = R.layout.activity_main
 
     //Setting NavigationBottom
 
@@ -60,14 +44,25 @@ class MainActivity : BaseActivity() {
         BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    viewPager.currentItem = 0
+                    viewPager.currentItem = TabFragmentType.HOME_FRAGMENT.value
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.favorite -> {
-                    viewPager.currentItem = 1
+                    viewPager.currentItem = TabFragmentType.FAVORITE_FRAGMENT.value
                     return@OnNavigationItemSelectedListener true
                 }
             }
             return@OnNavigationItemSelectedListener false
         }
+
+    override fun onPageScrollStateChanged(state: Int) {}
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        when (position) {
+            TabFragmentType.HOME_FRAGMENT.value -> bottomNavigation.menu.getItem(0).isChecked = true
+            TabFragmentType.FAVORITE_FRAGMENT.value -> bottomNavigation.menu.getItem(1).isChecked = true
+        }
+    }
+
+    override fun onPageSelected(position: Int) {}
 }

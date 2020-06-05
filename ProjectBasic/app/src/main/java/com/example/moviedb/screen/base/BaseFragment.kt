@@ -15,20 +15,19 @@ import com.example.moviedb.BR
 abstract class BaseFragment<ViewBinding : ViewDataBinding, ViewModel : BaseViewModel> : Fragment() {
 
     @get:LayoutRes
-    abstract val layoutId: Int
+    protected abstract val layoutId: Int
 
-    private var rootView: View? = null
-    private var viewDataBinding: ViewBinding? = null
-    abstract val viewModel: ViewModel
+    private lateinit var viewDataBinding: ViewBinding
+    protected abstract val viewModel: ViewModel
 
     abstract fun initComponents(view: ViewBinding)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        rootView = viewDataBinding?.root
-        return rootView
+        return viewDataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
