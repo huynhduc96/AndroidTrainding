@@ -7,25 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.moviedb.R
+import com.example.moviedb.databinding.SearchFragmentBinding
+import com.example.moviedb.screen.base.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment() {
 
-    private lateinit var viewModel: SearchViewModel
+class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>() {
+    override val layoutId: Int
+        get() = R.layout.search_fragment
+    override val viewModel: SearchViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.search_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-    companion object {
-        fun newInstance() = SearchFragment()
+    override fun initComponents(view: SearchFragmentBinding) {
     }
 }

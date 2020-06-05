@@ -18,21 +18,56 @@
 package com.example.moviedb.screen
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.example.moviedb.R
-import com.example.moviedb.screen.navigation.ContainerFragment
+import com.example.moviedb.screen.base.BaseActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+    override fun initComponent(saveInstantState: Bundle?) {
+        this.bottomNavigation.setOnNavigationItemSelectedListener(selectedListener)
+        setSupportActionBar(toolbar)
 
-    /**
-     * Our MainActivity is only responsible for setting the content view that contains the
-     * Navigation Host.
-     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrameLayout, ContainerFragment())
-            .commit()
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                when (position) {
+                    0 -> bottomNavigation.menu.getItem(0).isChecked = true
+                    1 -> bottomNavigation.menu.getItem(1).isChecked = true
+                }
+            }
+
+            override fun onPageSelected(position: Int) {}
+        })
+
+        val tabAdapter = TabAdapter(supportFragmentManager, this)
+
+        viewPager.adapter = tabAdapter
     }
+
+    override fun getLayout(): Int = R.layout.activity_main
+
+    //Setting NavigationBottom
+
+    private val selectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    viewPager.currentItem = 0
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.favorite -> {
+                    viewPager.currentItem = 1
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+            return@OnNavigationItemSelectedListener false
+        }
 }
