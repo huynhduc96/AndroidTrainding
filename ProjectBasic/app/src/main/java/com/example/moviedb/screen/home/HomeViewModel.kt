@@ -55,7 +55,6 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
-                Log.e(TAG, "getFirstInfoForApp: ${e.message}")
                 _status.value = LoadingApiStatus.ERROR
                 _eventNetworkError.value = true
             }

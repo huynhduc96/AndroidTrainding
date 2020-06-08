@@ -35,22 +35,20 @@ val networkModule = module {
 }
 
 
-fun retrofit(moshi: Moshi): Retrofit {
-    val okHttpClient = provideOkHttpClient()
-    return Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl(Constant.BASE_URL)
-        .client(okHttpClient)
-        .build()
-}
+fun retrofit(moshi: Moshi) = Retrofit.Builder()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .baseUrl(Constant.BASE_URL)
+    .client(provideOkHttpClient())
+    .build()
 
 fun provideOkHttpClient(): OkHttpClient {
     val httpClientBuilder = OkHttpClient.Builder()
     httpClientBuilder.addInterceptor {
         var request = it.request()
-        val url =
-            request.url().newBuilder().addQueryParameter(Constant.API_KEY_PAR, Constant.API_KEY)
-                .build()
+        val url = request.url()
+            .newBuilder()
+            .addQueryParameter(Constant.API_KEY_PAR, Constant.API_KEY)
+            .build()
         request = request.newBuilder().url(url).build()
         it.proceed(request)
     }

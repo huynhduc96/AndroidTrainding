@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
+class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(), TabLayout.OnTabSelectedListener {
 
     override val layoutId: Int
         get() = R.layout.home_fragment
@@ -41,19 +41,7 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
                 genresSelected = genres.getOrNull(0)?.genresID ?: 0
             }
         })
-        movieByKeyTabLayout?.addOnTabSelectedListener(
-            object : TabLayout.OnTabSelectedListener {
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                }
-
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    //Test TabSelect
-                    showMessage("selected ${viewModel.listGenres.value?.get(tab?.position!!)?.genresName}")
-                }
-            })
+        movieByKeyTabLayout?.addOnTabSelectedListener(this)
         movieByKeyTabLayout.getTabAt(0)?.select()
     }
 
@@ -67,4 +55,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>() {
     companion object {
         fun newInstance() = HomeFragment()
     }
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        showMessage("selected ${viewModel.listGenres.value?.get(tab?.position!!)?.genresName}")    }
 }
