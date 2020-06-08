@@ -11,7 +11,7 @@ import com.example.moviedb.screen.home.HomeViewModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.home_fragment.*
 
-@BindingAdapter("loandingApiStatus")
+@BindingAdapter("loadingApiStatus")
 fun bindStatus(
     statusImageView: ImageView,
     status: HomeViewModel.LoadingApiStatus?

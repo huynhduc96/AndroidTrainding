@@ -1,11 +1,13 @@
 package com.example.moviedb.di
 
+import android.content.Context
+import com.example.moviedb.BuildConfig
 import com.example.moviedb.data.service.ApiService
+import com.example.moviedb.data.service.NetworkConnection.NetworkConnectionInterceptor
 import com.example.moviedb.di.Constants.CONNECTION_TIMEOUT
 import com.example.moviedb.di.Constants.READ_TIMEOUT
 import com.example.moviedb.di.Constants.WRITE_TIMEOUT
 import com.example.moviedb.utils.Constant
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -27,7 +29,7 @@ val networkModule = module {
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
-        retrofit(moshi)
+        retrofit(moshi, get())
     }
     single {
         get<Retrofit>().create(ApiService::class.java)
@@ -35,23 +37,24 @@ val networkModule = module {
 }
 
 
-fun retrofit(moshi: Moshi) = Retrofit.Builder()
+fun retrofit(moshi: Moshi, context: Context) = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(Constant.BASE_URL)
-    .client(provideOkHttpClient())
+    .client(okhttp(context))
     .build()
 
-fun provideOkHttpClient(): OkHttpClient {
+fun okhttp(context : Context): OkHttpClient {
     val httpClientBuilder = OkHttpClient.Builder()
     httpClientBuilder.addInterceptor {
         var request = it.request()
         val url = request.url()
             .newBuilder()
-            .addQueryParameter(Constant.API_KEY_PAR, Constant.API_KEY)
+            .addQueryParameter(Constant.API_KEY_PAR, BuildConfig.API_KEY)
             .build()
         request = request.newBuilder().url(url).build()
         it.proceed(request)
     }
+    httpClientBuilder.addInterceptor(NetworkConnectionInterceptor(context))
     val logging = HttpLoggingInterceptor()
     logging.level = HttpLoggingInterceptor.Level.BODY
     httpClientBuilder.addInterceptor(logging)
