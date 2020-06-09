@@ -1,12 +1,13 @@
 package com.example.moviedb.screen.home
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.data.model.Genre
+import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.repository.impl.UserRepositoryImpl
 import com.example.moviedb.screen.base.BaseViewModel
+import com.example.moviedb.utils.Constant.DEFAULT_FIRST_GENRES
+import com.example.moviedb.utils.Constant.DEFAULT_FIRST_PAGE
 import kotlinx.coroutines.*
 
 class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewModel() {
@@ -32,12 +33,22 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
+    private val _navigateToSelectedMovie = MutableLiveData<Movie>()
+    val navigateToSelectedMovie: LiveData<Movie>
+        get() = _navigateToSelectedMovie
+
     private val _listGenres = MutableLiveData<List<Genre>>()
     val listGenres: MutableLiveData<List<Genre>>
         get() = _listGenres
+    var currentPage = DEFAULT_FIRST_PAGE
+    val genresSelected = MutableLiveData<Int>()
+    private val _listMovies = MutableLiveData<MutableList<Movie>>()
+    val listMovies: MutableLiveData<MutableList<Movie>>
+        get() = _listMovies
 
     init {
         getFirstInfoForApp()
+        getMovieData(DEFAULT_FIRST_GENRES, false)
     }
 
     /**
@@ -61,13 +72,14 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
         }
     }
 
-    fun refreshData() {
+    fun getMovieData(genre: Int, isSwitchTab: Boolean) {
+        if (isSwitchTab) currentPage = DEFAULT_FIRST_PAGE
         coroutineScope.launch {
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
-                    val listGenre = repositoryImpl.getGenreList().genres ?: emptyList()
-                    listGenres.postValue(listGenre)
+                    val listMovie = repositoryImpl.getMovieList(DEFAULT_FIRST_PAGE, genre).results
+                    _listMovies.postValue(listMovie as MutableList<Movie>?)
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false
@@ -77,6 +89,42 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 _eventNetworkError.value = true
             }
         }
+    }
+
+    fun refreshData() {
+        getMovieData(genresSelected.value!!, true)
+    }
+
+    fun loadMoreData() {
+        coroutineScope.launch {
+            try {
+                currentPage++
+                _status.value = LoadingApiStatus.LOADING
+                withContext(Dispatchers.IO) {
+                    val listMovie = repositoryImpl.getMovieList(
+                        currentPage,
+                        listGenres.value?.get(0)?.genresID!!
+                    ).results
+                    val newList = listMovies.value
+                    newList?.addAll(listMovie!!)
+                    listMovies.postValue(newList)
+                }
+                _status.value = LoadingApiStatus.DONE
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } catch (e: Exception) {
+                _status.value = LoadingApiStatus.ERROR
+                _eventNetworkError.value = true
+            }
+        }
+    }
+
+    fun displayMovieDetails(movie: Movie) {
+        _navigateToSelectedMovie.value = movie
+    }
+
+    fun displayPropertyDetailsComplete() {
+        _navigateToSelectedMovie.value = null
     }
 
     /**

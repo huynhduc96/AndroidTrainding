@@ -2,23 +2,35 @@ package com.example.moviedb.screen.home
 
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.R
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
-import com.example.moviedb.screen.favorite.FavoriteFragment
+import com.example.moviedb.utils.EndlessScrollListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.home_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(), TabLayout.OnTabSelectedListener {
+class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
+    TabLayout.OnTabSelectedListener {
+    private val endlessScrollListener = EndlessScrollListener(::onLoadMore)
 
     override val layoutId: Int
         get() = R.layout.home_fragment
     override val viewModel: HomeViewModel by viewModel()
-    private var genresSelected = 0
+
+    private val viewModelAdapter: MovieAdapter = MovieAdapter(MovieAdapter.OnClickListener {
+        viewModel.displayMovieDetails(it)
+    })
 
     override fun initComponents(view: HomeFragmentBinding) {
+        viewModel.listMovies.observe(viewLifecycleOwner, Observer { listMovie ->
+            listMovie?.apply {
+                viewModelAdapter?.submitList(this.toList())
+            }
+        })
+
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner,
             Observer<Boolean> { isNetworkError ->
@@ -38,11 +50,23 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(), TabLayo
                         movieByKeyTabLayout.newTab().setText(element.genresName)
                     )
                 }
-                genresSelected = genres.getOrNull(0)?.genresID ?: 0
+                viewModel.getMovieData(genres.getOrNull(0)?.genresID ?: 0, false)
             }
+
         })
         movieByKeyTabLayout?.addOnTabSelectedListener(this)
         movieByKeyTabLayout.getTabAt(0)?.select()
+        view.recycleMovies.adapter = viewModelAdapter
+        view.recycleMovies.layoutManager = GridLayoutManager(context, 2)
+        view.recycleMovies.addOnScrollListener(endlessScrollListener)
+
+        viewModel.genresSelected.observe(viewLifecycleOwner, Observer { genresSelected ->
+            viewModel.getMovieData(genresSelected, true)
+        })
+
+        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
+            //Do later
+        })
     }
 
     private fun onNetworkError() {
@@ -50,6 +74,10 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(), TabLayo
             showMessage("Network Error")
             viewModel.onNetworkErrorShown()
         }
+    }
+
+    private fun onLoadMore() {
+        viewModel.loadMoreData()
     }
 
     companion object {
@@ -61,5 +89,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(), TabLayo
     override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        showMessage("selected ${viewModel.listGenres.value?.get(tab?.position!!)?.genresName}")    }
+        viewModel.genresSelected.value = viewModel.listGenres.value?.get(tab?.position!!)?.genresID
+    }
 }

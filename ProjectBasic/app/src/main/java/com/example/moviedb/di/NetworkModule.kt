@@ -37,13 +37,13 @@ val networkModule = module {
 }
 
 
-fun retrofit(moshi: Moshi, context: Context) = Retrofit.Builder()
+private fun retrofit(moshi: Moshi, context: Context) = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(Constant.BASE_URL)
-    .client(okhttp(context))
+    .client(okHttp(context))
     .build()
 
-fun okhttp(context : Context): OkHttpClient {
+private fun okHttp(context : Context): OkHttpClient {
     val httpClientBuilder = OkHttpClient.Builder()
     httpClientBuilder.addInterceptor {
         var request = it.request()
