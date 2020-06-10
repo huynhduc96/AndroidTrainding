@@ -103,7 +103,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                         ).results
                     }
                     val newList = listMovies.value
-                    newList?.addAll(listMovie!!)
+                    listMovie?.let { newList?.addAll(it) }
                     _listMovies.postValue(newList)
                 }
                 _status.value = LoadingApiStatus.DONE

@@ -12,13 +12,11 @@ class EndlessScrollListener(private val loadMore: () -> Unit) : RecyclerView.OnS
         val layoutManager = recyclerView.layoutManager
         when {
             layoutManager is LinearLayoutManager
-                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
-            -> {
+                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1 -> {
                 loadMore()
             }
             layoutManager is GridLayoutManager
-                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
-            -> {
+                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1 -> {
                 val index = layoutManager.findLastVisibleItemPosition()
                 val count = layoutManager.itemCount - 1
                 loadMore()
@@ -26,8 +24,7 @@ class EndlessScrollListener(private val loadMore: () -> Unit) : RecyclerView.OnS
             layoutManager is StaggeredGridLayoutManager
                     && layoutManager.findLastVisibleItemPositions(
                 IntArray(layoutManager.spanCount)
-            )[0] == layoutManager.itemCount - 1
-            -> {
+            )[0] == layoutManager.itemCount - 1 -> {
                 loadMore()
             }
         }

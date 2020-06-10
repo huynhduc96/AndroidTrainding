@@ -90,7 +90,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        viewModel.genresSelected.value = viewModel.listGenres.value?.get(tab?.position!!)?.genresID
+        viewModel.genresSelected.value =
+            tab?.position?.let { viewModel.listGenres.value?.get(index = it)?.genresID }
     }
 
     companion object {
