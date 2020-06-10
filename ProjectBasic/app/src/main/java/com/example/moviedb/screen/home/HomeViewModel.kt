@@ -1,6 +1,7 @@
 package com.example.moviedb.screen.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
@@ -13,12 +14,6 @@ import kotlinx.coroutines.*
 class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewModel() {
     // Define enum Loading type
     enum class LoadingApiStatus { LOADING, ERROR, DONE }
-
-    // Define Job and Coroutine
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(
-        viewModelJob + Dispatchers.Main
-    )
 
     // Define LiveData status loading
     private val _status = MutableLiveData<LoadingApiStatus>()
@@ -55,7 +50,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
      * Sets the value of the status LiveData to the API status.
      */
     private fun getFirstInfoForApp() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
@@ -74,7 +69,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
 
     fun getMovieData(genre: Int, isSwitchTab: Boolean) {
         if (isSwitchTab) currentPage = DEFAULT_FIRST_PAGE
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
@@ -96,7 +91,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     }
 
     fun loadMoreData() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 currentPage++
                 _status.value = LoadingApiStatus.LOADING
@@ -132,10 +127,5 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
      */
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 }
