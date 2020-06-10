@@ -7,8 +7,6 @@ import com.example.moviedb.data.model.Genre
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.data.repository.impl.UserRepositoryImpl
 import com.example.moviedb.screen.base.BaseViewModel
-import com.example.moviedb.utils.Constant.DEFAULT_FIRST_GENRES
-import com.example.moviedb.utils.Constant.DEFAULT_FIRST_PAGE
 import kotlinx.coroutines.*
 
 class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewModel() {
@@ -16,6 +14,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     enum class LoadingApiStatus { LOADING, ERROR, DONE }
 
     // Define LiveData status loading
+    private var result = mutableListOf<Movie>()
     private val _status = MutableLiveData<LoadingApiStatus>()
     val status: LiveData<LoadingApiStatus>
         get() = _status
@@ -35,16 +34,15 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     private val _listGenres = MutableLiveData<List<Genre>>()
     val listGenres: LiveData<List<Genre>>
         get() = _listGenres
-    private var currentPage = DEFAULT_FIRST_PAGE
+    private var currentPage = Companion.DEFAULT_FIRST_PAGE
     val genresSelected = MutableLiveData<Int>()
     private val _listMovies = MutableLiveData<List<Movie>>()
     val listMovies: LiveData<List<Movie>>
         get() = _listMovies
-    private var result = mutableListOf<Movie>()
 
     init {
         getFirstInfoForApp()
-        getMovieData(DEFAULT_FIRST_GENRES, false)
+        getMovieData(Companion.DEFAULT_FIRST_GENRES, false)
     }
 
     /**
@@ -70,14 +68,15 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
 
     fun getMovieData(genre: Int, isSwitchTab: Boolean) {
         if (isSwitchTab) {
-            currentPage = DEFAULT_FIRST_PAGE
+            currentPage = Companion.DEFAULT_FIRST_PAGE
             result.clear()
         }
         viewModelScope.launch {
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
-                    val listMovie = repositoryImpl.getMovieList(DEFAULT_FIRST_PAGE, genre).results
+                    val listMovie =
+                        repositoryImpl.getMovieList(Companion.DEFAULT_FIRST_PAGE, genre).results
                     listMovie?.let { result.addAll(it) }
                     _listMovies.postValue(result)
                 }
@@ -102,10 +101,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
                     val listMovie = listGenres.value?.get(0)?.genresID?.let {
-                        repositoryImpl.getMovieList(
-                            currentPage,
-                            it
-                        ).results
+                        repositoryImpl.getMovieList(currentPage, it).results
                     }
                     listMovie?.let { result.addAll(it) }
                     _listMovies.postValue(result)
@@ -134,5 +130,10 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
      */
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
+    }
+
+    companion object {
+        const val DEFAULT_FIRST_PAGE = 1
+        const val DEFAULT_FIRST_GENRES = 28
     }
 }

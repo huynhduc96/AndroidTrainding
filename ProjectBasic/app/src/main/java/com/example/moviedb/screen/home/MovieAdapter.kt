@@ -13,6 +13,16 @@ import org.jetbrains.annotations.NotNull
 class MovieAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Movie, MovieViewHolder>(DiffCallback()) {
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        MovieViewHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context)))
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        val movie = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onItemClick(movie)
+        }
+        holder.bind(movie)
+    }
 
     class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,19 +33,8 @@ class MovieAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        MovieViewHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context)))
-
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie = getItem(position)
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(movie)
-        }
-        holder.bind(movie)
-    }
-
-    class OnClickListener(val clickListener: (movie: Movie) -> Unit) {
-        fun onClick(movie: Movie) = clickListener(movie)
+    interface OnClickListener {
+        fun onItemClick(movie: Movie)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Movie>() {

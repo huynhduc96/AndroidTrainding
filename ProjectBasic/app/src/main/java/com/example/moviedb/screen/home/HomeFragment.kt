@@ -4,6 +4,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.R
+import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
 import com.example.moviedb.utils.EndlessScrollListener
@@ -15,14 +16,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     TabLayout.OnTabSelectedListener {
     private val endlessScrollListener = EndlessScrollListener(::onLoadMore)
-
+    private val onClickListener = object : MovieAdapter.OnClickListener {
+        override fun onItemClick(movie: Movie) {
+            viewModel.displayMovieDetails(movie)
+        }
+    }
+    private val viewModelAdapter = MovieAdapter(onClickListener)
     override val layoutId: Int
         get() = R.layout.home_fragment
     override val viewModel: HomeViewModel by viewModel()
-
-    private val viewModelAdapter = MovieAdapter(MovieAdapter.OnClickListener {
-        viewModel.displayMovieDetails(it)
-    })
 
     override fun initComponents(view: HomeFragmentBinding) {
         initListenerViewModel(view)
