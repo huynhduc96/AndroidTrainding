@@ -33,12 +33,12 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
         get() = _navigateToSelectedMovie
 
     private val _listGenres = MutableLiveData<List<Genre>>()
-    val listGenres: MutableLiveData<List<Genre>>
+    val listGenres: LiveData<List<Genre>>
         get() = _listGenres
-    var currentPage = DEFAULT_FIRST_PAGE
+    private var currentPage = DEFAULT_FIRST_PAGE
     val genresSelected = MutableLiveData<Int>()
     private val _listMovies = MutableLiveData<MutableList<Movie>>()
-    val listMovies: MutableLiveData<MutableList<Movie>>
+    val listMovies: LiveData<MutableList<Movie>>
         get() = _listMovies
 
     init {
@@ -55,7 +55,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
                     val listGenre = repositoryImpl.getGenreList().genres ?: emptyList()
-                    listGenres.postValue(listGenre)
+                    _listGenres.postValue(listGenre)
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false
@@ -104,7 +104,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                     }
                     val newList = listMovies.value
                     newList?.addAll(listMovie!!)
-                    listMovies.postValue(newList)
+                    _listMovies.postValue(newList)
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false
