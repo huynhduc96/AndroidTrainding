@@ -3,7 +3,7 @@ package com.example.moviedb.di
 import android.content.Context
 import com.example.moviedb.BuildConfig
 import com.example.moviedb.data.service.ApiService
-import com.example.moviedb.data.service.NetworkConnection.NetworkConnectionInterceptor
+import com.example.moviedb.data.service.network.NetworkConnectionInterceptor
 import com.example.moviedb.di.Constants.CONNECTION_TIMEOUT
 import com.example.moviedb.di.Constants.READ_TIMEOUT
 import com.example.moviedb.di.Constants.WRITE_TIMEOUT

@@ -1,4 +1,4 @@
-package com.example.moviedb.data.service.NetworkConnection
+package com.example.moviedb.data.service.network
 
 import java.io.IOException
 
