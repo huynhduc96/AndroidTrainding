@@ -37,9 +37,10 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
         get() = _listGenres
     private var currentPage = DEFAULT_FIRST_PAGE
     val genresSelected = MutableLiveData<Int>()
-    private val _listMovies = MutableLiveData<MutableList<Movie>>()
-    val listMovies: LiveData<MutableList<Movie>>
+    private val _listMovies = MutableLiveData<List<Movie>>()
+    val listMovies: LiveData<List<Movie>>
         get() = _listMovies
+    private var result = mutableListOf<Movie>()
 
     init {
         getFirstInfoForApp()
@@ -68,13 +69,17 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     }
 
     fun getMovieData(genre: Int, isSwitchTab: Boolean) {
-        if (isSwitchTab) currentPage = DEFAULT_FIRST_PAGE
+        if (isSwitchTab) {
+            currentPage = DEFAULT_FIRST_PAGE
+            result.clear()
+        }
         viewModelScope.launch {
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
                     val listMovie = repositoryImpl.getMovieList(DEFAULT_FIRST_PAGE, genre).results
-                    _listMovies.postValue(listMovie?.toMutableList())
+                    listMovie?.let { result.addAll(it) }
+                    _listMovies.postValue(result)
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false
@@ -102,9 +107,9 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                             it
                         ).results
                     }
-                    val newList = listMovies.value
-                    listMovie?.let { newList?.addAll(it) }
-                    _listMovies.postValue(newList)
+                    listMovie?.let { result.addAll(it) }
+                    _listMovies.postValue(result)
+
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false

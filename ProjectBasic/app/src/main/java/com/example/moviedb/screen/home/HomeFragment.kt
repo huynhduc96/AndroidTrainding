@@ -29,6 +29,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         registerViewModel()
     }
 
+    override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        viewModel.genresSelected.value =
+            tab?.position?.let { viewModel.listGenres.value?.get(index = it)?.genresID }
+    }
+
     private fun initListenerViewModel(view: HomeFragmentBinding) {
         viewModel.listMovies.observe(viewLifecycleOwner, Observer { listMovie ->
             listMovie?.apply {
@@ -83,15 +92,6 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
 
     private fun onLoadMore() {
         viewModel.loadMoreData()
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-    override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-    override fun onTabSelected(tab: TabLayout.Tab?) {
-        viewModel.genresSelected.value =
-            tab?.position?.let { viewModel.listGenres.value?.get(index = it)?.genresID }
     }
 
     companion object {
