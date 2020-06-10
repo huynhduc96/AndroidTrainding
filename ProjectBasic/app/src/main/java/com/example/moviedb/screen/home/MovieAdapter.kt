@@ -44,9 +44,7 @@ class MovieAdapter(private val onClickListener: OnClickListener) :
         fun onClick(movie: Movie) = clickListener(movie)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return MovieViewHolder.from(parent)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder.from(parent)
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = getItem(position)
@@ -55,5 +53,4 @@ class MovieAdapter(private val onClickListener: OnClickListener) :
         }
         holder.bind(movie)
     }
-
 }

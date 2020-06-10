@@ -10,22 +10,26 @@ class EndlessScrollListener(private val loadMore: () -> Unit) : RecyclerView.OnS
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         val layoutManager = recyclerView.layoutManager
-        if (layoutManager is LinearLayoutManager
-            && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
-        ) {
-            loadMore()
-        } else if (layoutManager is GridLayoutManager
-            && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
-        ) {
-            val index = layoutManager.findLastVisibleItemPosition()
-            val count = layoutManager.itemCount - 1
-            loadMore()
-        } else if (layoutManager is StaggeredGridLayoutManager
-            && layoutManager.findLastVisibleItemPositions(
+        when {
+            layoutManager is LinearLayoutManager
+                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
+            -> {
+                loadMore()
+            }
+            layoutManager is GridLayoutManager
+                    && layoutManager.findLastVisibleItemPosition() == layoutManager.itemCount - 1
+            -> {
+                val index = layoutManager.findLastVisibleItemPosition()
+                val count = layoutManager.itemCount - 1
+                loadMore()
+            }
+            layoutManager is StaggeredGridLayoutManager
+                    && layoutManager.findLastVisibleItemPositions(
                 IntArray(layoutManager.spanCount)
             )[0] == layoutManager.itemCount - 1
-        ) {
-            loadMore()
+            -> {
+                loadMore()
+            }
         }
     }
 }

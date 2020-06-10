@@ -11,5 +11,8 @@ interface ApiService {
     suspend fun getGenreAsync(): GenreResponse
 
     @GET("/3/discover/movie")
-    suspend fun getPopularMovie(@Query("page") page: Int,@Query("with_genres") genre: Int): MovieResponse
+    suspend fun getPopularMovie(
+        @Query("page") page: Int,
+        @Query("with_genres") genre: Int
+    ): MovieResponse
 }

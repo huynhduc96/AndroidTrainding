@@ -20,22 +20,21 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         get() = R.layout.home_fragment
     override val viewModel: HomeViewModel by viewModel()
 
-    private val viewModelAdapter: MovieAdapter = MovieAdapter(MovieAdapter.OnClickListener {
+    private val viewModelAdapter = MovieAdapter(MovieAdapter.OnClickListener {
         viewModel.displayMovieDetails(it)
     })
 
     override fun initComponents(view: HomeFragmentBinding) {
+        initListenerViewModel(view)
+        registerViewModel()
+    }
+
+    private fun initListenerViewModel(view: HomeFragmentBinding) {
         viewModel.listMovies.observe(viewLifecycleOwner, Observer { listMovie ->
             listMovie?.apply {
                 viewModelAdapter?.submitList(this.toList())
             }
         })
-
-        viewModel.eventNetworkError.observe(
-            viewLifecycleOwner,
-            Observer<Boolean> { isNetworkError ->
-                if (isNetworkError) onNetworkError()
-            })
 
         viewModel.listGenres.observe(viewLifecycleOwner, Observer { genres ->
             if (movieByKeyTabLayout?.tabCount == 0) {
@@ -52,14 +51,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
                 }
                 viewModel.getMovieData(genres.getOrNull(0)?.genresID ?: 0, false)
             }
-
         })
         movieByKeyTabLayout?.addOnTabSelectedListener(this)
         movieByKeyTabLayout.getTabAt(0)?.select()
         view.recycleMovies.adapter = viewModelAdapter
         view.recycleMovies.layoutManager = GridLayoutManager(context, 2)
         view.recycleMovies.addOnScrollListener(endlessScrollListener)
+    }
 
+    private fun registerViewModel() {
         viewModel.genresSelected.observe(viewLifecycleOwner, Observer { genresSelected ->
             viewModel.getMovieData(genresSelected, true)
         })
@@ -67,6 +67,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
             //Do later
         })
+        viewModel.eventNetworkError.observe(
+            viewLifecycleOwner,
+            Observer<Boolean> { isNetworkError ->
+                if (isNetworkError) onNetworkError()
+            })
     }
 
     private fun onNetworkError() {
@@ -80,15 +85,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         viewModel.loadMoreData()
     }
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     override fun onTabReselected(tab: TabLayout.Tab?) {}
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         viewModel.genresSelected.value = viewModel.listGenres.value?.get(tab?.position!!)?.genresID
+    }
+
+    companion object {
+        fun newInstance() = HomeFragment()
     }
 }

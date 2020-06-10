@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class MovieResponse(
+data class MovieResponse(
     @Json(name = "page")
     val page: Int? = null,
     @Json(name = "total_results")

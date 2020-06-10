@@ -87,7 +87,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
     }
 
     fun refreshData() {
-        getMovieData(genresSelected.value!!, true)
+        genresSelected.value?.let { getMovieData(it, true) }
     }
 
     fun loadMoreData() {
@@ -96,10 +96,12 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 currentPage++
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
-                    val listMovie = repositoryImpl.getMovieList(
-                        currentPage,
-                        listGenres.value?.get(0)?.genresID!!
-                    ).results
+                    val listMovie = listGenres.value?.get(0)?.genresID?.let {
+                        repositoryImpl.getMovieList(
+                            currentPage,
+                            it
+                        ).results
+                    }
                     val newList = listMovies.value
                     newList?.addAll(listMovie!!)
                     listMovies.postValue(newList)
