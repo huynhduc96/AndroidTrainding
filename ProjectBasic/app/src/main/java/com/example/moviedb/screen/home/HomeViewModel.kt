@@ -74,7 +74,7 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
                     val listMovie = repositoryImpl.getMovieList(DEFAULT_FIRST_PAGE, genre).results
-                    _listMovies.postValue(listMovie as MutableList<Movie>?)
+                    _listMovies.postValue(listMovie?.toMutableList())
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false
