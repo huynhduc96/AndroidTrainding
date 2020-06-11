@@ -3,7 +3,7 @@ package com.example.moviedb.di
 import android.content.Context
 import com.example.moviedb.BuildConfig
 import com.example.moviedb.data.service.ApiService
-import com.example.moviedb.data.service.NetworkConnection.NetworkConnectionInterceptor
+import com.example.moviedb.data.service.network.NetworkConnectionInterceptor
 import com.example.moviedb.di.Constants.CONNECTION_TIMEOUT
 import com.example.moviedb.di.Constants.READ_TIMEOUT
 import com.example.moviedb.di.Constants.WRITE_TIMEOUT
@@ -37,13 +37,13 @@ val networkModule = module {
 }
 
 
-fun retrofit(moshi: Moshi, context: Context) = Retrofit.Builder()
+private fun retrofit(moshi: Moshi, context: Context) = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(Constant.BASE_URL)
-    .client(okhttp(context))
+    .client(okHttp(context))
     .build()
 
-fun okhttp(context : Context): OkHttpClient {
+private fun okHttp(context : Context): OkHttpClient {
     val httpClientBuilder = OkHttpClient.Builder()
     httpClientBuilder.addInterceptor {
         var request = it.request()
