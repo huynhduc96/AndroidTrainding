@@ -6,7 +6,13 @@ import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Trailer(
+data class Trailers(
+    @Json(name = "results")
+    val trailers: List<TrailerAttributes>
+) : Parcelable
+
+@Parcelize
+data class TrailerAttributes(
     val id: String?,
     val key: String?,
     val name: String?
@@ -14,9 +20,3 @@ data class Trailer(
     fun getFullTrailerPreviewImagePath() =
         if (key.isNullOrBlank()) null else Constant.BASE_URL_IMAGE + key + Constant.BASE_URL_IMAGE_DEFAULT
 }
-
-@Parcelize
-data class ListTrailer(
-    @Json(name = "results")
-    val listTrailer: List<Trailer>
-) : Parcelable

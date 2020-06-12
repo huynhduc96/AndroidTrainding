@@ -9,7 +9,7 @@
 
         <variable
             name="cast"
-            type="com.example.moviedb.data.model.Cast" />
+            type="com.example.moviedb.data.model.CastAttributes" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

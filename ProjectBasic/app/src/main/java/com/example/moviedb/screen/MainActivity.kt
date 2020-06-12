@@ -8,7 +8,8 @@ import com.example.moviedb.screen.mainlayout.ContainerFragment
 class MainActivity : BaseActivity() {
 
     override fun initComponent(saveInstantState: Bundle?) {
-        supportFragmentManager.beginTransaction().replace(R.id.mainFrameLayout, ContainerFragment())
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFrameLayout, ContainerFragment())
             .commit()
     }
 

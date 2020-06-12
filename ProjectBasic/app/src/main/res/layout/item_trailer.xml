@@ -9,7 +9,7 @@
 
         <variable
             name="trailer"
-            type="com.example.moviedb.data.model.Trailer" />
+            type="com.example.moviedb.data.model.TrailerAttributes" />
     </data>
 
     <androidx.cardview.widget.CardView

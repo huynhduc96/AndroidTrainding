@@ -77,16 +77,18 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
             viewModel.getMovieData(genresSelected, true)
         })
 
-        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
-            if (null != it) {
+        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer { movie ->
+            movie?.let {
                 val movieDetail =
                     DetailFragment.newInstance(viewModel.navigateToSelectedMovie.value)
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    ?.replace(R.id.mainFrameLayout, movieDetail)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                activity?.let {
+                    it.supportFragmentManager
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .replace(R.id.mainFrameLayout, movieDetail)
+                        .addToBackStack(null)
+                        .commit()
+                }
                 viewModel.displayPropertyDetailsComplete()
             }
         })
@@ -98,9 +100,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     }
 
     private fun onNetworkError() {
-        if (!viewModel.isNetworkErrorShown.value!!) {
-            showMessage("Network Error")
-            viewModel.onNetworkErrorShown()
+        viewModel.isNetworkErrorShown.value?.let { isNetworkErrorShown ->
+            if (!isNetworkErrorShown) {
+                showMessage(getString(R.string.networkError))
+                viewModel.onNetworkErrorShown()
+            }
         }
     }
 

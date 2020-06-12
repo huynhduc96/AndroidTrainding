@@ -8,4 +8,6 @@ object Constant {
     const val BASE_URL_IMAGE = "https://img.youtube.com/vi/"
     const val BASE_URL_IMAGE_DEFAULT = "/hqdefault.jpg"
     const val BASE_TITLE = "title"
+    const val BASE_YOUTUBE = "http://www.youtube.com/watch?v="
+    const val ACTION_YOUTUBE = "vnd.youtube:"
 }

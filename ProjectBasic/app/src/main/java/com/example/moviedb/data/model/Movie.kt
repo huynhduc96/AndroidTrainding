@@ -35,14 +35,12 @@ data class Movie(
     var isFavorite: Boolean? = false,
     val genres: List<Genre>? = null,
     @Json(name = "credits")
-    var credits: ListCast? = null,
+    var credits: Casts? = null,
     @Json(name = "videos")
-    val videos: ListTrailer? = null
+    val videos: Trailers? = null
 ) : Parcelable, Serializable {
 
-    fun getFullBackdropPath() =
-        if (backdrop_path.isNullOrBlank()) null else Constant.LARGE_IMAGE_URL + backdrop_path
+    fun getFullBackdropPath() = Constant.LARGE_IMAGE_URL + backdrop_path
 
-    fun getFullPosterPath() =
-        if (poster_path.isNullOrBlank()) null else Constant.SMALL_IMAGE_URL + poster_path
+    fun getFullPosterPath() = Constant.SMALL_IMAGE_URL + poster_path
 }
