@@ -4,4 +4,9 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="movies">Movies</string>
+    <string name="release_date">Release date</string>
+    <string name="vote">Votes</string>
+    <string name="casts">Casts</string>
+    <string name="produces">Produces</string>
+    <string name="trailer">Trailers</string>
 </resources>

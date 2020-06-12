@@ -1,12 +1,14 @@
 package com.example.moviedb.screen.home
 
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.R
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
+import com.example.moviedb.screen.detail.DetailFragment
 import com.example.moviedb.utils.EndlessScrollListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.home_fragment.*
@@ -76,7 +78,17 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         })
 
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
-            //Do later
+            if (null != it) {
+                val movieDetail =
+                    DetailFragment.newInstance(viewModel.navigateToSelectedMovie.value)
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.replace(R.id.mainFrameLayout, movieDetail)
+                    ?.addToBackStack(null)
+                    ?.commit()
+                viewModel.displayPropertyDetailsComplete()
+            }
         })
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner,
