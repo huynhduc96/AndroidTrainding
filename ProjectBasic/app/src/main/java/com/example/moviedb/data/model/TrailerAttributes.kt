@@ -17,6 +17,5 @@ data class TrailerAttributes(
     val key: String?,
     val name: String?
 ) : Parcelable {
-    fun getFullTrailerPreviewImagePath() =
-        if (key.isNullOrBlank()) null else Constant.BASE_URL_IMAGE + key + Constant.BASE_URL_IMAGE_DEFAULT
+    fun getFullTrailerPreviewImagePath() = Constant.BASE_URL_IMAGE + key + Constant.BASE_URL_IMAGE_DEFAULT
 }

@@ -9,7 +9,7 @@ class MainActivity : BaseActivity() {
 
     override fun initComponent(saveInstantState: Bundle?) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrameLayout, ContainerFragment())
+            .replace(R.id.mainFrameLayout, ContainerFragment.newInstance())
             .commit()
     }
 

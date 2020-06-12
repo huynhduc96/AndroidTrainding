@@ -34,7 +34,7 @@
             android:elevation="@dimen/dp_5"
             android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center_vertical"
-            android:text="@{movie.vote_average.toString()}"
+            android:text="@{movie.voteAverage.toString()}"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/bgImageView"

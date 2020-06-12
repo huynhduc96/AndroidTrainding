@@ -13,16 +13,18 @@ data class Casts(
 
 @Parcelize
 data class CastAttributes(
-    val cast_id: String?,
+    @Json(name = "cast_id")
+    val castId: String?,
     val character: String?,
-    val credit_id: String?,
+    @Json(name = "credit_id")
+    val creditId: String?,
     val gender: Int?,
     val id: String?,
     val name: String?,
     val order: Int?,
-    val profile_path: String?
+    @Json(name = "profile_path")
+    val profilePath: String?
 ) : Parcelable {
 
-    fun getFullProfilePath() =
-        if (profile_path.isNullOrBlank()) null else Constant.SMALL_IMAGE_URL + profile_path
+    fun getFullProfilePath() = Constant.SMALL_IMAGE_URL + profilePath
 }

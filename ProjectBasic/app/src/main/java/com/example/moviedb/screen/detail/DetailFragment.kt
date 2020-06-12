@@ -84,11 +84,13 @@ class DetailFragment() : BaseFragment<DetailFragmentBinding, DetailViewModel>() 
     }
 
     private fun initChipView(genres: List<Genre>) {
-        for (item in genres) {
-            val genresChip = LayoutInflater.from(activity)
-                .inflate(R.layout.item_chip, genresChipGroup, false) as Chip
-            genresChip.text = item.genresName
-            genresChipGroup.addView(genresChip)
+        if (genresChipGroup.childCount == 0) {
+            for (item in genres) {
+                val genresChip = LayoutInflater.from(activity)
+                    .inflate(R.layout.item_chip, genresChipGroup, false) as Chip
+                genresChip.text = item.genresName
+                genresChipGroup.addView(genresChip)
+            }
         }
     }
 

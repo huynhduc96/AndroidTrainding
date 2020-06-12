@@ -8,13 +8,11 @@ import com.example.moviedb.data.service.ApiService
 
 class UserRepositoryImpl(private val apiService: ApiService) : UserRepository {
 
-    override suspend fun getGenreList(): GenreResponse =
-        apiService.getGenreAsync()
+    override suspend fun getGenreList() = apiService.getGenreAsync()
 
-
-    override suspend fun getMovieList(page: Int, genre: Int): MovieResponse =
+    override suspend fun getMovieList(page: Int, genre: Int) =
         apiService.getPopularMovie(page, genre)
 
-    override suspend fun getMovieDetail(movieId: Int, type: String): Movie =
+    override suspend fun getMovieDetail(movieId: Int, type: String) =
         apiService.getMovieDetail(movieId, type)
 }

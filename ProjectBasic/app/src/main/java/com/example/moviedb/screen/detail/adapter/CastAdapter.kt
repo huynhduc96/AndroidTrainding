@@ -13,7 +13,6 @@ class CastAdapter : ListAdapter<CastAttributes, CastAdapter.CastViewHolder>(Diff
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder =
         CastViewHolder(ItemCastBinding.inflate(LayoutInflater.from(parent.context)))
 
-
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) =
         holder.bind(getItem(position))
 

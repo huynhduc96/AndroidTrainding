@@ -14,24 +14,32 @@ data class Movie(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val adult: Boolean? = false,
-    val backdrop_path: String? = null,
+    @Json(name = "backdrop_path")
+    val backdropPath: String? = null,
     val budget: Int? = null,
     val homepage: String? = null,
-    val imdb_id: String? = null,
-    val original_language: String? = null,
-    val original_title: String? = null,
+    @Json(name = "imdb_id")
+    val imdbId: String? = null,
+    @Json(name = "original_language")
+    val originalLanguage: String? = null,
+    @Json(name = "original_title")
+    val originalTitle: String? = null,
     val overview: String? = null,
     val popularity: Double? = null,
-    val poster_path: String? = null,
-    val release_date: String? = null,
+    @Json(name = "poster_path")
+    val posterPath: String? = null,
+    @Json(name = "release_date")
+    val releaseDate: String? = null,
     val revenue: Int? = null,
     val runtime: Int? = null,
     val status: String? = null,
     val tagline: String? = null,
     val title: String? = null,
     val video: Boolean? = false,
-    val vote_average: Double? = null,
-    val vote_count: Int? = null,
+    @Json(name = "vote_average")
+    val voteAverage: Double? = null,
+    @Json(name = "vote_count")
+    val voteCount: Int? = null,
     var isFavorite: Boolean? = false,
     val genres: List<Genre>? = null,
     @Json(name = "credits")
@@ -40,7 +48,7 @@ data class Movie(
     val videos: Trailers? = null
 ) : Parcelable, Serializable {
 
-    fun getFullBackdropPath() = Constant.LARGE_IMAGE_URL + backdrop_path
+    fun getFullBackdropPath() = Constant.LARGE_IMAGE_URL + backdropPath
 
-    fun getFullPosterPath() = Constant.SMALL_IMAGE_URL + poster_path
+    fun getFullPosterPath() = Constant.SMALL_IMAGE_URL + posterPath
 }

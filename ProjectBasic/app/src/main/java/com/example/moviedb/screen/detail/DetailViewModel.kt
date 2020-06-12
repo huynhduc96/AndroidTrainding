@@ -28,7 +28,6 @@ class DetailViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseView
     val movieDetail: LiveData<Movie>
         get() = _movieDetail
 
-
     /**
      * Resets the network error flag.
      */
