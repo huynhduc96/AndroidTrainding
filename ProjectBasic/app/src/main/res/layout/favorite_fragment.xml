@@ -5,6 +5,7 @@
 
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.moviedb.screen.favorite.FavoriteViewModel" />
@@ -13,7 +14,25 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/favoriteSwipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onRefreshFavorite="@{viewModel}">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favoriteMovieRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

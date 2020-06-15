@@ -37,7 +37,7 @@ class DetailFragment() : BaseFragment<DetailFragmentBinding, DetailViewModel>() 
         get() = R.layout.detail_fragment
 
     override fun initComponents(view: DetailFragmentBinding) {
-        movie?.let { viewModel.getDataMovieDetail(it) }
+        movie?.let { viewModel.getLocalData(it) }
         initToolBar()
         registerViewModel(view)
     }
@@ -54,6 +54,14 @@ class DetailFragment() : BaseFragment<DetailFragmentBinding, DetailViewModel>() 
             viewLifecycleOwner,
             Observer<Boolean> { isNetworkError ->
                 if (isNetworkError) onNetworkError()
+            })
+        viewModel.statusFavorite.observe(
+            viewLifecycleOwner, Observer {
+                if (it == DetailViewModel.FavoriteStatus.ADD) {
+                    showMessage(getString(R.string.add_farorite))
+                } else {
+                    showMessage(getString(R.string.remove_favorite))
+                }
             })
         view.castsRecyclerView.adapter = viewModelCastAdapter
         view.moviesTrailerRecyclerView.adapter = viewModelTrailerAdapter

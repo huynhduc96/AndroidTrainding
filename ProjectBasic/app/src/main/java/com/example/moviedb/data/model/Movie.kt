@@ -37,7 +37,7 @@ data class Movie(
     val title: String? = null,
     val video: Boolean? = false,
     @Json(name = "vote_average")
-    val voteAverage: Double? = null,
+    val voteAverage: Float? = null,
     @Json(name = "vote_count")
     val voteCount: Int? = null,
     var isFavorite: Boolean? = false,

@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviedb.R
 import com.example.moviedb.screen.detail.DetailViewModel
+import com.example.moviedb.screen.favorite.FavoriteAdapter
+import com.example.moviedb.screen.favorite.FavoriteViewModel
 import com.example.moviedb.screen.home.HomeViewModel
 
 @BindingAdapter("loadingApiStatus")
@@ -77,6 +79,14 @@ fun bindStatusAPI(
 fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(viewModel: DetailViewModel) {
     setOnRefreshListener {
         viewModel.movieDetail.value?.let { viewModel.getDataMovieDetail(it) }
+        isRefreshing = false
+    }
+}
+
+@BindingAdapter("android:onRefreshFavorite")
+fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(viewModel: FavoriteViewModel) {
+    setOnRefreshListener {
+        viewModel.refreshList()
         isRefreshing = false
     }
 }
