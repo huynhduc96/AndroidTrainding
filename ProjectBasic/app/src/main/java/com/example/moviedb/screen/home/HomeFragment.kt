@@ -1,12 +1,14 @@
 package com.example.moviedb.screen.home
 
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.R
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
+import com.example.moviedb.screen.detail.DetailFragment
 import com.example.moviedb.utils.EndlessScrollListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.home_fragment.*
@@ -76,7 +78,15 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         })
 
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
-            //Do later
+            val movieDetail =
+                DetailFragment.newInstance(it)
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                ?.add(R.id.mainFrameLayout, movieDetail)
+                ?.addToBackStack(null)
+                ?.commit()
+
         })
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner,
@@ -86,9 +96,11 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     }
 
     private fun onNetworkError() {
-        if (!viewModel.isNetworkErrorShown.value!!) {
-            showMessage("Network Error")
-            viewModel.onNetworkErrorShown()
+        viewModel.isNetworkErrorShown.value?.let { isNetworkErrorShown ->
+            if (!isNetworkErrorShown) {
+                showMessage(getString(R.string.networkError))
+                viewModel.onNetworkErrorShown()
+            }
         }
     }
 
