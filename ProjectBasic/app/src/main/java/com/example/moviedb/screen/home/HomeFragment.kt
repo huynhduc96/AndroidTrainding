@@ -77,18 +77,16 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
             viewModel.getMovieData(genresSelected, true)
         })
 
-        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer { movie ->
-            movie?.let {
-                val movieDetail =
-                    DetailFragment.newInstance(movie)
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    ?.replace(R.id.mainFrameLayout, movieDetail)
-                    ?.addToBackStack(null)
-                    ?.commit()
-                viewModel.displayPropertyDetailsComplete()
-            }
+        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
+            val movieDetail =
+                DetailFragment.newInstance(it)
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                ?.add(R.id.mainFrameLayout, movieDetail)
+                ?.addToBackStack(null)
+                ?.commit()
+
         })
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner,

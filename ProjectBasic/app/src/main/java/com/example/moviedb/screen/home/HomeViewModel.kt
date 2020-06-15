@@ -121,10 +121,6 @@ class HomeViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseViewMo
         _navigateToSelectedMovie.value = movie
     }
 
-    fun displayPropertyDetailsComplete() {
-        _navigateToSelectedMovie.value = null
-    }
-
     /**
      * Resets the network error flag.
      */
