@@ -80,15 +80,13 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer { movie ->
             movie?.let {
                 val movieDetail =
-                    DetailFragment.newInstance(viewModel.navigateToSelectedMovie.value)
-                activity?.let {
-                    it.supportFragmentManager
-                        .beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .replace(R.id.mainFrameLayout, movieDetail)
-                        .addToBackStack(null)
-                        .commit()
-                }
+                    DetailFragment.newInstance(movie)
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.replace(R.id.mainFrameLayout, movieDetail)
+                    ?.addToBackStack(null)
+                    ?.commit()
                 viewModel.displayPropertyDetailsComplete()
             }
         })

@@ -7,7 +7,6 @@ import androidx.viewpager.widget.ViewPager
 import com.example.moviedb.R
 import com.example.moviedb.screen.MainActivity
 import com.example.moviedb.screen.MainViewPageAdapter
-import com.example.moviedb.screen.home.HomeFragment
 import com.example.moviedb.utils.annotation.MainPage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_container.*
