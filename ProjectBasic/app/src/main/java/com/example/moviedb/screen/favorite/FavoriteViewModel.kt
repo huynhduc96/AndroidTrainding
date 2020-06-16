@@ -17,10 +17,10 @@ class FavoriteViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseVi
     private val _status = MutableLiveData<LoadingDataBaseStatus>()
     val status: LiveData<LoadingDataBaseStatus>
         get() = _status
-    private var _eventDatabaseError = MutableLiveData<Boolean>(false)
+    private val _eventDatabaseError = MutableLiveData<Boolean>(false)
     val eventDatabaseError: LiveData<Boolean>
         get() = _eventDatabaseError
-    private var _isDatabaseErrorShown = MutableLiveData<Boolean>(false)
+    private val _isDatabaseErrorShown = MutableLiveData<Boolean>(false)
     val isDatabaseErrorShown: LiveData<Boolean>
         get() = _isDatabaseErrorShown
     var listMovies: LiveData<List<Movie>>

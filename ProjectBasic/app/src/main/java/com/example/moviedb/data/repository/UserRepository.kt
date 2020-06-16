@@ -14,11 +14,11 @@ interface UserRepository {
     /**
      * local movie db functions
      */
-     fun getMovieListLocal(): LiveData<List<Movie>>
+    fun getMovieListLocal(): LiveData<List<Movie>>
 
     suspend fun getMovieLocal(id: Int): Movie?
 
-    suspend fun insertLocal(movie: Movie)
+    suspend fun insertMovieLocal(movie: Movie)
 
     suspend fun updateLocal(movie: Movie)
 

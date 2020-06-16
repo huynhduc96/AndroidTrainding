@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemFavoriteBinding
+import com.example.moviedb.screen.base.OnItemClickListener
 
 class FavoriteAdapter(
-    private val onItemClickListener: FavoriteAdapter.OnItemClickListener,
+    private val onItemClickListener: OnItemClickListener<Movie>,
     private val onItemDeleteClickListener: FavoriteAdapter.OnItemDeleteClickListener
 ) :
     ListAdapter<Movie, FavoriteAdapter.FavoriteViewHolder>(DiffCallback()) {
@@ -22,30 +23,25 @@ class FavoriteAdapter(
         holder.itemView.setOnClickListener {
             onItemClickListener.onItemClick(movie)
         }
-        holder.bind(movie, onItemDeleteClickListener)
+        holder.bindData(movie, onItemDeleteClickListener)
     }
 
     class FavoriteViewHolder(private val binding: ItemFavoriteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(
+        fun bindData(
             movie: Movie,
-            onItemDeleteClickListener: FavoriteAdapter.OnItemDeleteClickListener
+            onItemDeleteClickListener: OnItemDeleteClickListener
         ) {
-            binding.movie = movie
-            binding.deleteImageView.setOnClickListener {
-                onItemDeleteClickListener.onItemDelete(movie)
-            }
             binding.executePendingBindings()
+            binding.apply {
+                this.movie = movie
+                deleteImageView.setOnClickListener {
+                    onItemDeleteClickListener.onItemDelete(movie)
+                }
+                executePendingBindings()
+            }
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(movie: Movie)
-    }
-
-    interface OnItemDeleteClickListener {
-        fun onItemDelete(movie: Movie)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Movie>() {
@@ -56,5 +52,9 @@ class FavoriteAdapter(
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
+    }
+
+    interface OnItemDeleteClickListener {
+        fun onItemDelete(movie: Movie)
     }
 }

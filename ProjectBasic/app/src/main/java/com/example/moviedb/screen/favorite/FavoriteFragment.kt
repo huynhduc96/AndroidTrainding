@@ -6,22 +6,23 @@ import com.example.moviedb.R
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.FavoriteFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
+import com.example.moviedb.screen.base.OnItemClickListener
 import com.example.moviedb.screen.detail.DetailFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FavoriteFragment : BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>() {
 
-    private val onItemClickListener = object : FavoriteAdapter.OnItemClickListener {
+    private val onItemClickListener = object : OnItemClickListener<Movie> {
         override fun onItemClick(movie: Movie) {
             val movieDetail =
                 DetailFragment.newInstance(movie)
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                ?.add(R.id.mainFrameLayout, movieDetail)
-                ?.addToBackStack(null)
-                ?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                add(R.id.mainFrameLayout, movieDetail)
+                addToBackStack(null)
+                commit()
+            }
         }
     }
 
@@ -45,7 +46,7 @@ class FavoriteFragment : BaseFragment<FavoriteFragmentBinding, FavoriteViewModel
     private fun initListenerViewModel(view: FavoriteFragmentBinding) {
         viewModel.listMovies.observe(viewLifecycleOwner, Observer { listMovie ->
             listMovie?.apply {
-                viewModelAdapter?.submitList(this.toList())
+                viewModelAdapter.submitList(this.toList())
             }
         })
         view.favoriteMovieRecyclerView.adapter = viewModelAdapter

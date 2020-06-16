@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.ItemMovieBinding
+import com.example.moviedb.screen.base.OnItemClickListener
 import com.example.moviedb.screen.home.MovieAdapter.*
-import org.jetbrains.annotations.NotNull
 
-class MovieAdapter(private val onClickListener: OnClickListener) :
+class MovieAdapter(private val onClickListener: OnItemClickListener<Movie>) :
     ListAdapter<Movie, MovieViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -21,20 +21,18 @@ class MovieAdapter(private val onClickListener: OnClickListener) :
         holder.itemView.setOnClickListener {
             onClickListener.onItemClick(movie)
         }
-        holder.bind(movie)
+        holder.bindData(movie)
     }
 
     class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: Movie) {
-            binding.movie = movie
-            binding.executePendingBindings()
+        fun bindData(movie: Movie) {
+            binding.apply {
+                this.movie = movie
+                executePendingBindings()
+            }
         }
-    }
-
-    interface OnClickListener {
-        fun onItemClick(movie: Movie)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Movie>() {

@@ -113,7 +113,7 @@ class DetailViewModel(private val repositoryImpl: UserRepositoryImpl) : BaseView
             try {
                 _status.value = LoadingApiStatus.LOADING
                 withContext(Dispatchers.IO) {
-                    repositoryImpl.insertLocal(movie)
+                    repositoryImpl.insertMovieLocal(movie)
                 }
                 _status.value = LoadingApiStatus.DONE
                 _eventNetworkError.value = false

@@ -24,7 +24,7 @@ class UserRepositoryImpl(
 
     override suspend fun getMovieLocal(id: Int) = favoritesDao.getMovie(id)
 
-    override suspend fun insertLocal(movie: Movie) = favoritesDao.insert(movie)
+    override suspend fun insertMovieLocal(movie: Movie) = favoritesDao.insert(movie)
 
     override suspend fun updateLocal(movie: Movie) = favoritesDao.update(movie)
 

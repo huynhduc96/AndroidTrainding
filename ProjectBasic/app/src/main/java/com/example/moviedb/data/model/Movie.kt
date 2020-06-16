@@ -46,7 +46,7 @@ data class Movie(
     var credits: Casts? = null,
     @Json(name = "videos")
     val videos: Trailers? = null
-) : Parcelable, Serializable {
+) : Parcelable {
 
     fun getFullBackdropPath() = Constant.LARGE_IMAGE_URL + backdropPath
 
