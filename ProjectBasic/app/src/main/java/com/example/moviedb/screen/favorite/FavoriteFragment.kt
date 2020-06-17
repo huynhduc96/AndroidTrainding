@@ -14,9 +14,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FavoriteFragment : BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>() {
 
     private val onItemClickListener = object : OnItemClickListener<Movie> {
-        override fun onItemClick(movie: Movie) {
+        override fun onItemClick(model: Movie) {
             val movieDetail =
-                DetailFragment.newInstance(movie)
+                DetailFragment.newInstance(model)
             activity?.supportFragmentManager?.beginTransaction()?.apply {
                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 add(R.id.mainFrameLayout, movieDetail)

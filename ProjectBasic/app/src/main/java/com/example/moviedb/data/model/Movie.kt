@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.example.moviedb.utils.Constant
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
 
 @Parcelize
 @Entity(tableName = "movie")

@@ -20,8 +20,8 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     TabLayout.OnTabSelectedListener {
     private val endlessScrollListener = EndlessScrollListener(::onLoadMore)
     private val onClickListener = object : OnItemClickListener<Movie> {
-        override fun onItemClick(movie: Movie) {
-            viewModel.displayMovieDetails(movie)
+        override fun onItemClick(model: Movie) {
+            viewModel.displayMovieDetails(model)
         }
     }
     private val viewModelAdapter = MovieAdapter(onClickListener)

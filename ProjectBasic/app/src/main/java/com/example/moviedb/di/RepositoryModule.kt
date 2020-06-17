@@ -18,7 +18,7 @@ val repositoryModule = module {
 private fun createUserRepositoryImpl(apiService: ApiService, favoritesDao: FavoritesDao) =
     UserRepositoryImpl(apiService, favoritesDao)
 
-fun createAppDatabase(context: Context) =
+private fun createAppDatabase(context: Context) =
     Room.databaseBuilder(context, AppDatabase::class.java, Constant.DATABASE_NAME).build()
 
-fun createFavoritesDao(appDatabase: AppDatabase) = appDatabase.favoritesDao()
+private fun createFavoritesDao(appDatabase: AppDatabase) = appDatabase.favoritesDao()
