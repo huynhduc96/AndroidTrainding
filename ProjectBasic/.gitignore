@@ -27,6 +27,8 @@ out/
 # Gradle files
 .gradle
 .gradle/
+/gradle.properties
+
 build/
 
 # Signing files

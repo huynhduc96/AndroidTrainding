@@ -13,8 +13,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_KEY", "\"${API_KEY}\""
     }
 
     buildTypes {
@@ -22,6 +22,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    dataBinding {
+        enabled = true
+    }
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -48,6 +54,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit: $version_retrofit"
     implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
+    //okhttp3
+
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
 
     //moshi
@@ -91,4 +101,13 @@ dependencies {
 
     // Koin AndroidX Fragment Factory (unstable version)
     implementation "org.koin:koin-androidx-fragment:$koin_version"
+
+    //circleimageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //material
+    implementation 'com.google.android.material:material:1.1.0'
+
+    //room-ktx
+    implementation "androidx.room:room-ktx:2.2.5"
 }

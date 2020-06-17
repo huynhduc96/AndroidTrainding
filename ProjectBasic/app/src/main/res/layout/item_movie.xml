@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="movie"
+            type="com.example.moviedb.data.model.Movie" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/bgImageView"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginStart="@dimen/dp_8"
+            android:background="@drawable/ic_imbd"
+            android:elevation="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textImdb"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:elevation="@dimen/dp_5"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center_vertical"
+            android:text="@{movie.voteAverage.toString()}"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/bgImageView"
+            app:layout_constraintEnd_toEndOf="@+id/bgImageView"
+            app:layout_constraintTop_toTopOf="@+id/bgImageView" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/dp_175"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            app:cardCornerRadius="@dimen/dp_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/itemMovieImageView"
+                imageUrl="@{movie.fullPosterPath}"
+                android:layout_width="@dimen/dp_175"
+                android:layout_height="@dimen/dp_220"
+                android:background="@drawable/placeholder"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_16"
+                android:paddingBottom="@dimen/dp_10"
+                android:text="@{ movie.title }"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

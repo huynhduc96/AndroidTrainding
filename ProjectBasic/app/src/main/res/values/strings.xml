@@ -3,4 +3,14 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
+    <string name="movies">Movies</string>
+    <string name="release_date">Release date</string>
+    <string name="vote">Votes</string>
+    <string name="casts">Casts</string>
+    <string name="produces">Produces</string>
+    <string name="trailer">Trailers</string>
+    <string name="networkError">Network Error</string>
+    <string name="databaseError">Access Database Error</string>
+    <string name="add_farorite">Add To Favorite List</string>
+    <string name="remove_favorite">Remove To Favorite List</string>
 </resources>
