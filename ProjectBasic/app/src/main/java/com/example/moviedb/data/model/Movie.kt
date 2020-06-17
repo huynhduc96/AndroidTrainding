@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.example.moviedb.utils.Constant
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
 
 @Parcelize
 @Entity(tableName = "movie")
@@ -37,7 +36,7 @@ data class Movie(
     val title: String? = null,
     val video: Boolean? = false,
     @Json(name = "vote_average")
-    val voteAverage: Double? = null,
+    val voteAverage: Float? = null,
     @Json(name = "vote_count")
     val voteCount: Int? = null,
     var isFavorite: Boolean? = false,
@@ -46,7 +45,7 @@ data class Movie(
     var credits: Casts? = null,
     @Json(name = "videos")
     val videos: Trailers? = null
-) : Parcelable, Serializable {
+) : Parcelable {
 
     fun getFullBackdropPath() = Constant.LARGE_IMAGE_URL + backdropPath
 

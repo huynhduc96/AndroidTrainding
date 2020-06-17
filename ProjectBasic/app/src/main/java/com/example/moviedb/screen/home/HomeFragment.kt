@@ -8,6 +8,7 @@ import com.example.moviedb.R
 import com.example.moviedb.data.model.Movie
 import com.example.moviedb.databinding.HomeFragmentBinding
 import com.example.moviedb.screen.base.BaseFragment
+import com.example.moviedb.screen.base.OnItemClickListener
 import com.example.moviedb.screen.detail.DetailFragment
 import com.example.moviedb.utils.EndlessScrollListener
 import com.google.android.material.tabs.TabLayout
@@ -18,9 +19,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
     TabLayout.OnTabSelectedListener {
     private val endlessScrollListener = EndlessScrollListener(::onLoadMore)
-    private val onClickListener = object : MovieAdapter.OnClickListener {
-        override fun onItemClick(movie: Movie) {
-            viewModel.displayMovieDetails(movie)
+    private val onClickListener = object : OnItemClickListener<Movie> {
+        override fun onItemClick(model: Movie) {
+            viewModel.displayMovieDetails(model)
         }
     }
     private val viewModelAdapter = MovieAdapter(onClickListener)
@@ -80,13 +81,12 @@ class HomeFragment : BaseFragment<HomeFragmentBinding, HomeViewModel>(),
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner, Observer {
             val movieDetail =
                 DetailFragment.newInstance(it)
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                ?.add(R.id.mainFrameLayout, movieDetail)
-                ?.addToBackStack(null)
-                ?.commit()
-
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                add(R.id.mainFrameLayout, movieDetail)
+                addToBackStack(null)
+                commit()
+            }
         })
         viewModel.eventNetworkError.observe(
             viewLifecycleOwner,

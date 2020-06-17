@@ -10,4 +10,5 @@ object Constant {
     const val BASE_TITLE = "title"
     const val BASE_YOUTUBE = "http://www.youtube.com/watch?v="
     const val ACTION_YOUTUBE = "vnd.youtube:"
+    const val DATABASE_NAME = "DATABASE_NAME"
 }
